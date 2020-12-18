@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import '../button_landing.dart';
+import 'package:kafes_app/button_landing.dart';
+
 
 
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.redAccent,
+      backgroundColor: Colors.white,
       body: Column(
         children: [
           Spacer(),
@@ -30,16 +31,9 @@ class LoginPage extends StatelessWidget {
               ),
             ),
           ),
-          Expanded(child: Text('Forgot Password',),),
           Expanded(
             child: ButtonLanding(
               buttonLabel: 'Login',
-              backgroundButtonColor: Colors.white,
-            ),
-          ),
-          Expanded(
-            child: ButtonLanding(
-              buttonLabel: 'Login with Instagram',
               backgroundButtonColor: Colors.white,
             ),
           ),

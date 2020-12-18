@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "129507821725",
+    "project_id": "kafes-70338",
+    "storage_bucket": "kafes-70338.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129507821725:android:59fdbf96b7bbac9b682c74",
+        "android_client_info": {
+          "package_name": "com.example.kafes_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129507821725-qmgsdv6m7teha9edv4neq9692gkibcmd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA4pYDHV8bW0Pl36n6Ls_y3IFd5VrsRMQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129507821725-qmgsdv6m7teha9edv4neq9692gkibcmd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
