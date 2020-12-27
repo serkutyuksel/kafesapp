@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/button_landing.dart';
 
-
 class SignUpPage extends StatefulWidget {
   SignUpPage(this.submitForm);
   final void Function(
       String mail,
       String username,
       String password,
-      BuildContext ctx,
+      String department,
+      BuildContext cnt,
       )submitForm;
   @override
   SignUpPageState createState() => SignUpPageState();
@@ -20,6 +20,7 @@ class SignUpPageState extends State<SignUpPage> {
   var _mail = '';
   var _username = '';
   var _password = '';
+  var _department = '';
 
   void _submit(){
     final isValid = _formKey.currentState.validate();
@@ -30,6 +31,7 @@ class SignUpPageState extends State<SignUpPage> {
         _mail.trim(),
         _username.trim(),
         _password.trim(),
+        _department.trim(),
         context,
       );
     }
@@ -59,6 +61,24 @@ class SignUpPageState extends State<SignUpPage> {
                   },
                   decoration: InputDecoration(
                       labelText: 'Enter your username'
+                  ),
+                ),
+              ),),
+              Expanded(child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 50.0,),
+                child: TextFormField(
+                  key: ValueKey('department'),
+                  validator: (value) {
+                    if(value.isEmpty || value.length < 3) {
+                      return 'Department length must be at least 3';
+                    }
+                    return null;
+                  },
+                  onSaved: (value){
+                    _department = value;
+                  },
+                  decoration: InputDecoration(
+                      labelText: 'Enter your department'
                   ),
                 ),
               ),),
@@ -113,6 +133,3 @@ class SignUpPageState extends State<SignUpPage> {
     );
   }
 }
-
-
-
