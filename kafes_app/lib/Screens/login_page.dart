@@ -46,6 +46,7 @@ class LoginPageState extends State<LoginPage>{
                   horizontal: 50.0,
                 ),
                 child: TextFormField(
+                  style: TextStyle(color: Colors.red),
                   key: ValueKey('mail'),
                   decoration: InputDecoration(labelText: 'Enter your mail'),
                   validator: (value){
@@ -66,6 +67,7 @@ class LoginPageState extends State<LoginPage>{
                   horizontal: 50.0,
                 ),
                 child: TextFormField(
+                  style: TextStyle(color: Colors.red),
                   key: ValueKey('password'),
                   decoration: InputDecoration(labelText: 'Enter your password'),
                   validator: (value) {

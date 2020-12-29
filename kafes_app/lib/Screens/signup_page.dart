@@ -11,6 +11,7 @@ class SignUpPage extends StatefulWidget {
       String department,
       BuildContext cnt,
       )submitForm;
+
   @override
   SignUpPageState createState() => SignUpPageState();
 }
@@ -20,7 +21,7 @@ class SignUpPageState extends State<SignUpPage> {
   var _mail = '';
   var _username = '';
   var _password = '';
-  var _department = '';
+  var _department = 'Computer Engineering';
 
   void _submit(){
     final isValid = _formKey.currentState.validate();
@@ -49,6 +50,7 @@ class SignUpPageState extends State<SignUpPage> {
               Expanded(child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 50.0,),
                 child: TextFormField(
+                  style: TextStyle(color: Colors.red),
                   key: ValueKey('username'),
                   validator: (value) {
                     if(value.isEmpty || value.length < 3) {
@@ -64,27 +66,44 @@ class SignUpPageState extends State<SignUpPage> {
                   ),
                 ),
               ),),
-              Expanded(child: Container(
-                margin: EdgeInsets.symmetric(horizontal: 50.0,),
-                child: TextFormField(
-                  key: ValueKey('department'),
-                  validator: (value) {
-                    if(value.isEmpty || value.length < 3) {
-                      return 'Department length must be at least 3';
-                    }
-                    return null;
-                  },
-                  onSaved: (value){
-                    _department = value;
-                  },
-                  decoration: InputDecoration(
-                      labelText: 'Enter your department'
+              Expanded(child: Container (
+                margin: EdgeInsets.symmetric(horizontal: 10.0),
+                child: DropdownButton<String>(
+                  value: _department,
+                  elevation: 8,
+                  style: TextStyle(color: Colors.red),
+                  underline: Container(
+                    height: 1,
+                    color: Colors.red,
                   ),
+                  onChanged: (String newValue){
+                    setState(() {
+                      _department = newValue;
+                    });
+                  },
+                  items: ["Computer Engineering","Software Engineering","Aerospace Engineering",
+                          "Biomedical Engineering","Civil Engineering", "Electrical and Electronics Engineering",
+                          "Food Engineering", "Genetics and Bioengineering", "Industrial Engineering",
+                          "Mechanical Engineering", "Mechatronics Engineering", "Mathematics", "Physics",
+                          "English Translation and Interpreting", "Psychology", "Sociology", "Architecture",
+                          "Industrial Design", "Interior Architecture and Environmental Design", "Textile and Fashion Design",
+                          "Visual Communication Design", "Law", "Cinema and Digital Media", "New Media and Communication",
+                          "Public Relations and Advertising", "Accounting and Auditing Program", "Business Administration",
+                          "Economics", "International Trade and Finance", "Logistics Management", "Health Management", "Nursing",
+                          "Medicine",]
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList()
                 ),
-              ),),
+              ),
+              ),
               Expanded(child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 50.0,),
                 child: TextFormField(
+                  style: TextStyle(color: Colors.red),
                   key: ValueKey('password'),
                   validator: (value) {
                     if(value.isEmpty || value.length < 7) {
@@ -105,6 +124,7 @@ class SignUpPageState extends State<SignUpPage> {
                 child: Container(
                   margin: EdgeInsets.symmetric(horizontal: 50.0,),
                   child: TextFormField(
+                    style: TextStyle(color: Colors.red),
                     key: ValueKey('email'),
                     validator: (value){
                       if(value.isEmpty || !value.contains('@ieu.edu.tr')) {
