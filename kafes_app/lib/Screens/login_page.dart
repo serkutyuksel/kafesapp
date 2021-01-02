@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:kafes_app/button_landing.dart';
+import 'package:kafes_app/Screens/profile_page.dart' ;
+
 
 
 
@@ -87,7 +89,12 @@ class LoginPageState extends State<LoginPage>{
               child: ButtonLanding(
                 buttonLabel: 'Login',
                 backgroundButtonColor: Colors.white,
-                onPress: _submit,
+                onPress: () {
+                  _submit();
+                  //_submit method birşeyler return etmeli, bunu check edip o şekilde profil sayfasına yönlendirmeliyiz.
+                  // profil sayfasına, kişinin UID'si veya username'i paslanıp, profil sayfasından gerekli bilgiler çekilmeli.
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => ProfilePage()));
+                  }
               ),
             ),
           ],
@@ -98,3 +105,8 @@ class LoginPageState extends State<LoginPage>{
   }
   }
 
+
+
+// onPress: () { _submit;
+//Navigator.pushReplacement(
+//context,MaterialPageRoute(builder: (context) => ProfilePage()),);}
