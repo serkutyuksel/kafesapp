@@ -63,13 +63,15 @@ class _LandingPageState extends State<LandingPage> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            backgroundColor: Colors.redAccent,
-            title: Row(
-              children: [
-                Text('Kafes'),
-              ],
-            ),
-            bottom: TabBar(tabs: [
+            elevation: 0,
+            backgroundColor: Colors.white,
+            title: Text('Kafes', style: TextStyle(color: Colors.redAccent),),
+            bottom: TabBar(
+              indicatorColor: Colors.redAccent,
+              unselectedLabelColor: Colors.black45,
+              indicatorPadding: EdgeInsets.only(left: 20.0, right: 20.0),
+              labelColor: Colors.redAccent,
+              tabs: [
               Tab(
                 text: 'Login',
               ),
