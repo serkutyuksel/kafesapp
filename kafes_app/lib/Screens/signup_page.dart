@@ -1,41 +1,47 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:kafes_app/Screens/landing_page.dart';
 import 'package:kafes_app/button_landing.dart';
-import 'package:kafes_app/Screens/profile_page.dart' ;
 
 class SignUpPage extends StatefulWidget {
-  SignUpPage(this.submitForm);
-  final void Function(
-      String mail,
-      String username,
-      String password,
-      String department,
-      BuildContext cnt,
-      )submitForm;
-
   @override
   SignUpPageState createState() => SignUpPageState();
 }
 
 class SignUpPageState extends State<SignUpPage> {
+  final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   var _mail = '';
   var _username = '';
   var _password = '';
   var _department = 'Computer Engineering';
+  UserCredential result;
 
-  void _submit(){
+  void _submit() async {
     final isValid = _formKey.currentState.validate();
     FocusScope.of(context).unfocus();
     if(isValid) {
       _formKey.currentState.save();
-      widget.submitForm(
-        _mail.trim(),
-        _username.trim(),
-        _password.trim(),
-        _department.trim(),
-        context,
-      );
+      try {
+        result = await _auth.createUserWithEmailAndPassword(
+            email: _mail, password: _password);
+        FirebaseFirestore.instance.collection('user').doc(result.user.uid)
+            .set({
+          'username': _username,
+          'email': _mail,
+          'department': _department,
+        });
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => LandingPage()));
+      }
+      on FirebaseAuthException catch(error) {
+        var warning = error.toString();
+        Scaffold.of(context).showSnackBar(SnackBar(content: Text(
+            warning),),);
+      }
     }
   }
 
@@ -144,7 +150,6 @@ class SignUpPageState extends State<SignUpPage> {
               buttonLabel: 'Sign Up',
                 onPress: () {
                 _submit();
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context) => ProfilePage()));
                 }
               ),
           ],
