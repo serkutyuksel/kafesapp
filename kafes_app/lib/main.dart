@@ -12,22 +12,14 @@ void main() async {
 }
 
 class KafesApp extends StatelessWidget {
-  void Function(String mail, String username, String password,
-      String department, BuildContext cnt) get createUser => null;
-
-  void Function(String mail, String password,
-      BuildContext cnt) get signInUser => null;
-
-
-
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: LandingPage(),
       routes: {
-        '/login' : (context) => LoginPage(signInUser),
-        '/signup' : (context) => SignUpPage(createUser),
+        '/login' : (context) => LoginPage(),
+        '/signup' : (context) => SignUpPage(),
         '/home' : (context) => HomePage(),
         '/landing' : (context) => LandingPage(),
       },
