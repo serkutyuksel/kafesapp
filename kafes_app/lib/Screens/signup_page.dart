@@ -3,7 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Screens/landing_page.dart';
-import 'package:kafes_app/button_landing.dart';
+import 'package:kafes_app/Components/button_landing.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -11,6 +11,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class SignUpPageState extends State<SignUpPage> {
+
   final _auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   var _mail = '';

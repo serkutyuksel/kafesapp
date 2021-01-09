@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:kafes_app/button_landing.dart';
+import 'package:kafes_app/Components/button_landing.dart';
 import 'package:kafes_app/Screens/profile_page.dart' ;
 
 class LoginPage extends StatefulWidget {
