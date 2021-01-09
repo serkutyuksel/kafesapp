@@ -20,7 +20,7 @@ class KafesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      home: LandingPage(),
       routes: {
         '/login' : (context) => LoginPage(),
         '/signup' : (context) => SignUpPage(),

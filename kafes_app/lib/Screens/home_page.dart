@@ -1,10 +1,20 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Components/post_flow.dart';
+import 'package:kafes_app/Screens/profile_page.dart';
 
 
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+
+  HomePage({this.uid});
+  final String uid;
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +24,9 @@ class HomePage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(CupertinoIcons.profile_circled, color: Colors.white, size: 40.0,),
         onPressed: (){
-          Navigator.of(context).pushNamed('/profile');
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) => ProfilePage(uid: widget.uid)));
         },),
         title: Text("Kafes", style: TextStyle(color: Colors.white),),
         actions: [

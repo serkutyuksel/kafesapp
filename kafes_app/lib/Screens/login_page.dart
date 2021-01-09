@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Components/button_landing.dart';
 import 'package:kafes_app/Screens/profile_page.dart' ;
+import 'package:kafes_app/Screens/home_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPageState createState() => LoginPageState();
@@ -24,7 +25,7 @@ class LoginPageState extends State<LoginPage> {
             email: _mail, password: _password);
         Navigator.pushReplacement(context,
             MaterialPageRoute(
-                builder: (BuildContext context) => ProfilePage(uid: result.user.uid)));
+                builder: (BuildContext context) => HomePage(uid: result.user.uid)));
       }
       on FirebaseAuthException catch(error) {
         var warning = error.toString();
