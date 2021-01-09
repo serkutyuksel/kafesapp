@@ -27,6 +27,7 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.redAccent,
       ),
       body: NestedScrollView(
+
           headerSliverBuilder: (BuildContext context, innerBoxIsScrolled){
             return[
               SliverAppBar(
