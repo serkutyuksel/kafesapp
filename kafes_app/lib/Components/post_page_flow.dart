@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:kafes_app/Screens/post_page.dart';
 
 
-class PostFlow extends StatelessWidget {
+class PostPageFlow extends StatelessWidget {
 
-  PostFlow({this.uid});
+  PostPageFlow({this.uid, this.postID});
   final String uid;
+  final String postID;
 
-  postOptions(BuildContext context) {
+  commentOptions(BuildContext context) {
     return showDialog(context: context, builder: (context){
       return AlertDialog(
         actions: <Widget>[
           MaterialButton(
             onPressed: (){
               },
-            child: Text('Report post!'),
+            child: Text('Report comment!'),
           ),
         ],
       );
@@ -27,7 +27,7 @@ class PostFlow extends StatelessWidget {
 
     return Expanded(
       child: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('post').snapshots(),
+        stream: FirebaseFirestore.instance.collection('post/$postID/comments').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot ){
           if(snapshot.hasError){
             return Text('Error: $snapshot.error');
@@ -37,13 +37,8 @@ class PostFlow extends StatelessWidget {
           }
           return ListView(
             children: snapshot.data.docs.map((doc) => InkWell(
-              onTap: (){
-                Navigator.push(context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => PostPage(uid: uid, postID: doc.id,)));
-              },
               onLongPress: (){
-                postOptions(context);
+                commentOptions(context);
               },
               child: Container(
                 margin: EdgeInsets.all(5),
@@ -58,8 +53,8 @@ class PostFlow extends StatelessWidget {
                       minHeight: 10.0,
                       maxHeight: 40.0,
                     ),
-                      margin: EdgeInsets.all(10),
-                      child: Text(doc['postTitle']),
+                    margin: EdgeInsets.all(10),
+                    child: Text(doc['comment']),
                   ),
                   subtitle: Container(
                     margin: EdgeInsets.all(10),
@@ -67,14 +62,13 @@ class PostFlow extends StatelessWidget {
                       minHeight: 10.0,
                       maxHeight: 50.0,
                     ),
-                    child: Text(doc['postBody']),
+                    child: Text(doc['comment']),
                   ),
                 ),
               ),
             )).toList(),
           );
         },
-
       ),
     );
   }
