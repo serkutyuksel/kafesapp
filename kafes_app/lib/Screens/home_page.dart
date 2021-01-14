@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Components/post_flow.dart';
+import 'package:kafes_app/Screens/new_post.dart';
 import 'package:kafes_app/Screens/profile_page.dart';
 
 
@@ -14,7 +15,9 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+
 class _HomePageState extends State<HomePage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +27,7 @@ class _HomePageState extends State<HomePage> {
         leading: IconButton(
           icon: Icon(CupertinoIcons.profile_circled, color: Colors.white, size: 40.0,),
         onPressed: (){
-          Navigator.pushReplacement(context,
+          Navigator.push(context,
               MaterialPageRoute(
                   builder: (BuildContext context) => ProfilePage(uid: widget.uid)));
         },),
@@ -52,11 +55,13 @@ class _HomePageState extends State<HomePage> {
           },
           body: Column(
         children: [
-          PostFlow(),
+          PostFlow(uid: widget.uid,),
         ],
       ),),
       floatingActionButton: FloatingActionButton(onPressed: (){
-        Navigator.of(context).pushNamed('/add_post');
+        Navigator.push(context,
+            MaterialPageRoute(
+                builder: (BuildContext context) => NewPost(uid: widget.uid)));
       },
       child: Icon(Icons.edit, color: Colors.white,),
         backgroundColor: Colors.redAccent,
