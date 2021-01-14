@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:kafes_app/Screens/edit_profile.dart';
 
 
 DocumentSnapshot snapshot;
@@ -19,18 +20,35 @@ class _ProfilePageState extends State<ProfilePage> {
   var username = "";
   var email = "";
   var department = "";
+  var fullName = "";
+  var gender = "";
 
   @override
   void initState() {
     getUsername();
     getEmail();
     getDepartment();
+    getFullName();
+    getGender();
   }
 
     void getUsername() async {
     final userData = await _firestore.collection('user').doc(widget.uid).get();
     setState(() {
       username = userData.get('username');
+    });
+  }
+
+  void getFullName() async {
+    final userData = await _firestore.collection('user').doc(widget.uid).get();
+    setState(() {
+      fullName = userData.get('fullName');
+    });
+  }
+  void getGender() async {
+    final userData = await _firestore.collection('user').doc(widget.uid).get();
+    setState(() {
+      gender = userData.get('gender');
     });
   }
 
@@ -59,7 +77,6 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 children: [
                   Container(
-                    height: 70.0,
                     color: Colors.redAccent,
                     child: Container(
                         margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
@@ -83,10 +100,11 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                       Expanded(
                         child:((() {
-                          while (username != null && email != null && department != null){
+                          while (username != null && email != null && fullName != null ){
                             return Column(
                               children: [
                                 Text(username),
+                                Text(fullName),
                                 Text(department),
                                 Text(email),
                               ],
@@ -105,7 +123,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         width: 180.0,
                         height: 45.0,
                         child: TextButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => EditProfile(uid: widget.uid, username: username, email: email, fullName: fullName,)),);
+                            },
                             child: Text('Edit Profile'),
                         ),
                       )
@@ -119,7 +139,6 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 }
 
-//Navigator.pushReplacement(
-//context,MaterialPageRoute(builder: (context) => EditProfile()),);
+
 
 

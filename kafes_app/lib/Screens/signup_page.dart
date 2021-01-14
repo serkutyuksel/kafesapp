@@ -20,6 +20,7 @@ class SignUpPageState extends State<SignUpPage> {
   String _department;
   String _gender;
   var _number;
+  String _fullName = '';
   UserCredential result;
 
   void _submit() async {
@@ -37,6 +38,7 @@ class SignUpPageState extends State<SignUpPage> {
           'department': _department,
           'gender': _gender,
           'id': _number,
+          'fullName' : _fullName,
         });
         Navigator.pushReplacement(context,
             MaterialPageRoute(
@@ -76,6 +78,25 @@ class SignUpPageState extends State<SignUpPage> {
                   },
                   decoration: InputDecoration(
                       labelText: 'Enter your username'
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 50.0,),
+                child: TextFormField(
+                  style: TextStyle(color: Colors.red),
+                  key: ValueKey('fullName'),
+                  validator: (value) {
+                    if(value.isEmpty || value.length < 5) {
+                      return 'Must be 6 characters or more';
+                    }
+                    return null;
+                  },
+                  onSaved: (value){
+                    _fullName = value;
+                  },
+                  decoration: InputDecoration(
+                    labelText: 'Enter your full name',
                   ),
                 ),
               ),
