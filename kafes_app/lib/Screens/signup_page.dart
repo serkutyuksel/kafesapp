@@ -22,6 +22,7 @@ class SignUpPageState extends State<SignUpPage> {
   var _number;
   String _fullName = '';
   UserCredential result;
+  var _profilePic = '';
 
   void _submit() async {
     final isValid = _formKey.currentState.validate();
@@ -39,6 +40,7 @@ class SignUpPageState extends State<SignUpPage> {
           'gender': _gender,
           'id': _number,
           'fullName' : _fullName,
+          'profilePic' : _profilePic,
         });
         Navigator.pushReplacement(context,
             MaterialPageRoute(
