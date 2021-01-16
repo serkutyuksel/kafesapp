@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Screens/edit_profile.dart';
+import 'package:kafes_app/Screens/home_page.dart';
+import 'package:kafes_app/Screens/landing_page.dart';
+import 'package:kafes_app/Screens/login_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:kafes_app/Components/post_flow.dart';
 
@@ -90,16 +94,23 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            centerTitle: true,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            title: Text("MY PROFILE", style: TextStyle(color: Colors.redAccent, fontFamily: 'BebasNeue', fontSize: 30.0,),),
+            leading: IconButton(
+              icon: Icon(CupertinoIcons.arrow_left_circle, color: Colors.redAccent, size: 30.0,),
+              onPressed: (){
+                Navigator.push(context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) => HomePage(uid: widget.uid)));
+              },),),
             body: SafeArea(
               child: Column(
                 children: [
-                  Container(
-                        margin: EdgeInsets.only(top: 30.0, bottom: 10.0),
-                        alignment: Alignment.center,
-                        child: Text(
-                          'My Profile',
-                          style: TextStyle(fontFamily: 'BebasNeue', fontSize: 30.0, color: Colors.redAccent),)
-                    ),
+
                       Column(
                         children: [
                           Container(
@@ -148,6 +159,17 @@ class _ProfilePageState extends State<ProfilePage> {
                           customLaunch('mailto:$email');
                         },
                         child: Text('Send E-mail'),
+                      ),
+                      SizedBox(
+                        width:10 ,
+                      ),
+                      RaisedButton(
+                        padding: EdgeInsets.all(10),
+                        color: Colors.redAccent,
+                        onPressed: () {
+                          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LandingPage()));
+                        },
+                        child: Text('Log Out'),
                       ),
                     ],
                   ),

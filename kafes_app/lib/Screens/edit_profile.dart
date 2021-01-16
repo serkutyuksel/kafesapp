@@ -10,7 +10,7 @@ class EditProfile extends StatefulWidget {
   final String email;
   final String gender;
   final String fullName;
-  final String department;
+  String department;
 
   EditProfile({
     this.uid,
@@ -30,7 +30,7 @@ class EditProfile extends StatefulWidget {
 
 class _EditProfileState extends State<EditProfile> {
 
-  TextEditingController fullName, username,department,email,gender;
+  TextEditingController fullName, username,email,gender;
   final _formKey = GlobalKey<FormState>();
   final _firestore = FirebaseFirestore.instance;
   var newUsername = "";
@@ -44,6 +44,7 @@ class _EditProfileState extends State<EditProfile> {
     await _firestore.collection('user').doc(widget.uid).update({
       "username" : newUsername,
       "fullName" : newFullName,
+      "department" : widget.department,
     }).then((value) => Navigator.pushReplacement(context,
         MaterialPageRoute(
             builder: (BuildContext context) => ProfilePage(uid: widget.uid))));
@@ -55,7 +56,6 @@ class _EditProfileState extends State<EditProfile> {
   void initState() {
    fullName = new TextEditingController(text: widget.fullName);
    username = new TextEditingController(text: widget.username);
-   department = new TextEditingController(text: widget.department);
    gender = new TextEditingController(text: widget.gender);
    email = new TextEditingController(text: widget.email);
 
@@ -113,15 +113,39 @@ class _EditProfileState extends State<EditProfile> {
                     ),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 50.0,),
-                  child: TextFormField(
-                    enabled: false,
-                    controller: department,
-                    style: TextStyle(color: Colors.red),
-                    decoration: InputDecoration(
-                      labelText: ('Department can not be edited'),
-                    ),
+                Container (
+                  margin: EdgeInsets.symmetric(horizontal: 50.0),
+                  child: DropdownButton<String>(
+                      hint: Text("Choose your department"),
+                      isExpanded: true,
+                      value: widget.department,
+                      elevation: 8,
+                      style: TextStyle(color: Colors.redAccent),
+                      underline: Container(
+                        height: 1,
+                        color: Colors.grey,
+                      ),
+                      onChanged: (String newValue){
+                        setState(() {
+                          widget.department = newValue;
+                        });
+                      },
+                      items: ["Computer Engineering","Software Engineering","Aerospace Engineering",
+                        "Biomedical Engineering","Civil Engineering", "Electrical and Electronics Engineering",
+                        "Food Engineering", "Genetics and Bioengineering", "Industrial Engineering",
+                        "Mechanical Engineering", "Mechatronics Engineering", "Mathematics", "Physics",
+                        "English Translation and Interpreting", "Psychology", "Sociology", "Architecture",
+                        "Industrial Design", "Interior Architecture and Environmental Design", "Textile and Fashion Design",
+                        "Visual Communication Design", "Law", "Cinema and Digital Media", "New Media and Communication",
+                        "Public Relations and Advertising", "Accounting and Auditing Program", "Business Administration",
+                        "Economics", "International Trade and Finance", "Logistics Management", "Health Management", "Nursing",
+                        "Medicine",]
+                          .map<DropdownMenuItem<String>>((String newValue) {
+                        return DropdownMenuItem<String>(
+                          value: newValue,
+                          child: Text(newValue),
+                        );
+                      }).toList()
                   ),
                 ),
                 Container(
@@ -129,7 +153,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: TextFormField(
                     enabled: false,
                     controller: email,
-                    style: TextStyle(color: Colors.red),
+                    style: TextStyle(color: Colors.grey),
                     decoration: InputDecoration(
                       labelText: ('E-mail can not be edited'),
                     ),
@@ -140,10 +164,7 @@ class _EditProfileState extends State<EditProfile> {
                   child: TextFormField(
                     enabled: false,
                     controller: gender,
-                    style: TextStyle(color: Colors.red),
-                    decoration: InputDecoration(
-                      labelText: ('Gender can not be edited'),
-                    ),
+                    style: TextStyle(color: Colors.grey),
                   ),
                 ),
                 RaisedButton(
