@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Screens/new_post.dart';
+import 'package:kafes_app/Screens/post_page.dart';
 import 'package:kafes_app/Screens/profile_page.dart';
 import 'Screens//login_page.dart';
 import 'Screens//signup_page.dart';
@@ -28,6 +30,7 @@ class KafesApp extends StatelessWidget {
         '/landing' : (context) => LandingPage(),
         '/add_post' : (context) => NewPost(),
         '/profile' : (context) => ProfilePage(),
+        '/post_page' : (context) => PostPage(),
       },
     );
   }

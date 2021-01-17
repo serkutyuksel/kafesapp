@@ -22,6 +22,9 @@ class _NewPostState extends State<NewPost> {
   var postDate = DateTime.now();
   String postTopic = 'Genel';
   var postAuthorUsername = '';
+  String postID = '' ;
+
+
 
   void submitPost() async {
     final isValid = _formKey.currentState.validate();
@@ -33,11 +36,15 @@ class _NewPostState extends State<NewPost> {
             'postBody': postBody,
             'postTopic' : postTopic,
             'postDate': postDate,
-            'postAuthorUserName' : postAuthorUsername,
+            'postAuthorUsername' : postAuthorUsername,
             'postAuthorUid': widget.uid}).whenComplete(() =>
-          Navigator.push(context,
-              MaterialPageRoute(
-                  builder: (BuildContext context) => HomePage(uid: widget.uid))));
+
+          //TODO: Posts will be added to also user's "userPosts" collection.
+          //FirebaseFirestore.instance.collection('user').doc(widget.uid).collection('userPosts').doc().set({}).whenComplete(() =>)
+              Navigator.push(context,
+                  MaterialPageRoute(
+                   builder: (BuildContext context) => HomePage(uid: widget.uid))));
+
     }
   }
 
@@ -52,6 +59,7 @@ class _NewPostState extends State<NewPost> {
       postAuthorUsername = userData.get('username');
     });
   }
+
 
 
 

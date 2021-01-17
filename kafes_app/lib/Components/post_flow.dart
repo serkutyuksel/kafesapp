@@ -36,39 +36,41 @@ class PostFlow extends StatelessWidget {
             return Text('Loading...');
           }
           return ListView(
-            children: snapshot.data.docs.map((doc) => InkWell(
-              onTap: (){
-                Navigator.push(context,
-                    MaterialPageRoute(
-                        builder: (BuildContext context) => PostPage(uid: uid, postID: doc.id,)));
-              },
-              onLongPress: (){
-                postOptions(context);
-              },
-              child: Container(
-                margin: EdgeInsets.all(5),
-                decoration: BoxDecoration(
-                  color: Colors.redAccent,
-                  borderRadius: BorderRadius.circular(20.0),
+            children: snapshot.data.docs.map((doc) => Container(
+              margin: EdgeInsets.all(5),
+              decoration: BoxDecoration(
+                color: Colors.redAccent,
+                borderRadius: BorderRadius.circular(20.0),
+              ),
+              child: ListTile(
+                onTap: (){
+                  Navigator.push(context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => PostPage(uid: uid, postID: doc.id,)));
+                },
+                onLongPress: (){
+                  postOptions(context);
+                },
+                trailing: Container(
+                  margin: EdgeInsets.all(10),
+                  child: Text(doc['postAuthorUsername']),
                 ),
-                child: ListTile(
-                  leading:  Icon(Icons.topic_rounded),
-                  title: Container(
-                    constraints: new BoxConstraints(
-                      minHeight: 10.0,
-                      maxHeight: 40.0,
-                    ),
-                      margin: EdgeInsets.all(10),
-                      child: Text(doc['postTitle']),
+                leading:  Icon(Icons.topic_rounded),
+                title: Container(
+                  constraints: new BoxConstraints(
+                    minHeight: 10.0,
+                    maxHeight: 40.0,
                   ),
-                  subtitle: Container(
                     margin: EdgeInsets.all(10),
-                    constraints: new BoxConstraints(
-                      minHeight: 10.0,
-                      maxHeight: 50.0,
-                    ),
-                    child: Text(doc['postBody']),
+                    child: Text(doc['postTitle']),
+                ),
+                subtitle: Container(
+                  margin: EdgeInsets.all(10),
+                  constraints: new BoxConstraints(
+                    minHeight: 10.0,
+                    maxHeight: 50.0,
                   ),
+                  child: Text(doc['postBody']),
                 ),
               ),
             )).toList(),
@@ -76,6 +78,15 @@ class PostFlow extends StatelessWidget {
         },
 
       ),
+    );
+  }
+}
+
+class PostCard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+
     );
   }
 }
