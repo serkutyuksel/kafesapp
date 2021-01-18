@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kafes_app/Screens/other_profile.dart';
 
 
 class PostPageFlow extends StatelessWidget {

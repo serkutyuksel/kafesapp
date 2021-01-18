@@ -1,26 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kafes_app/Screens/edit_profile.dart';
 import 'package:kafes_app/Screens/home_page.dart';
-import 'package:kafes_app/Screens/landing_page.dart';
-import 'package:kafes_app/Screens/login_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:kafes_app/Components/post_flow.dart';
 
 
 
-class ProfilePage extends StatefulWidget {
+class OtherProfile extends StatefulWidget {
 
-  ProfilePage({this.uid});
+  OtherProfile({this.uid, this.otherUid});
   final String uid;
-
+  final String otherUid;
 
   @override
-  _ProfilePageState createState() => _ProfilePageState();
+  _OtherProfileState createState() => _OtherProfileState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _OtherProfileState extends State<OtherProfile> {
   final _firestore = FirebaseFirestore.instance;
   var username = "";
   var email = "";
@@ -40,27 +37,27 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
     void getUsername() async {
-    final userData = await _firestore.collection('user').doc(widget.uid).get();
+    final userData = await _firestore.collection('user').doc(widget.otherUid).get();
     setState(() {
       username = userData.get('username');
     });
   }
 
   void getFullName() async {
-    final userData = await _firestore.collection('user').doc(widget.uid).get();
+    final userData = await _firestore.collection('user').doc(widget.otherUid).get();
     setState(() {
       fullName = userData.get('fullName');
     });
   }
   void getGender() async {
-    final userData = await _firestore.collection('user').doc(widget.uid).get();
+    final userData = await _firestore.collection('user').doc(widget.otherUid).get();
     setState(() {
       gender = userData.get('gender');
     });
   }
 
      void getEmail() async {
-     final userData = await _firestore.collection('user').doc(widget.uid).get();
+     final userData = await _firestore.collection('user').doc(widget.otherUid).get();
        setState(() {
          email = userData.get('email');
        });
@@ -68,7 +65,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
       void getDepartment() async {
-      final userData = await _firestore.collection('user').doc(widget.uid).get();
+      final userData = await _firestore.collection('user').doc(widget.otherUid).get();
        setState(() {
          department = userData.get('department');
        });
@@ -76,7 +73,7 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void getProfilePic() async {
-    final userData = await _firestore.collection('user').doc(widget.uid).get();
+    final userData = await _firestore.collection('user').doc(widget.otherUid).get();
     setState(() {
       profilePic = userData.get('profilePic');
     });
@@ -99,7 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
             centerTitle: true,
             backgroundColor: Colors.white,
             elevation: 0,
-            title: Text("MY PROFILE", style: TextStyle(color: Colors.redAccent, fontFamily: 'BebasNeue', fontSize: 30.0,),),
+            title: Text("@$username", style: TextStyle(color: Colors.redAccent, fontFamily: 'BebasNeue', fontSize: 30.0,),),
             leading: IconButton(
               icon: Icon(CupertinoIcons.arrow_left_circle, color: Colors.redAccent, size: 30.0,),
               onPressed: (){
@@ -142,13 +139,6 @@ class _ProfilePageState extends State<ProfilePage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                       RaisedButton(
-                          color: Colors.redAccent,
-                            onPressed: () {
-                              Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => EditProfile(uid: widget.uid, username: username, email: email, fullName: fullName,department: department, gender: gender,)),);
-                            },
-                            child: Text('Edit Profile'),
-                        ),
                       SizedBox(
                         width:10 ,
                       ),
@@ -156,9 +146,12 @@ class _ProfilePageState extends State<ProfilePage> {
                         padding: EdgeInsets.all(10),
                         color: Colors.redAccent,
                         onPressed: () {
-                          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LandingPage()));
+                          customLaunch('mailto:$email');
                         },
-                        child: Text('Log Out'),
+                        child: Text('Send E-mail'),
+                      ),
+                      SizedBox(
+                        width:10 ,
                       ),
                     ],
                   ),

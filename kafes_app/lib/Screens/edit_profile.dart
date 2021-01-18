@@ -38,16 +38,18 @@ class _EditProfileState extends State<EditProfile> {
   void _submit () async {
     final isValid = _formKey.currentState.validate();
     if(isValid) {
-      _formKey.currentState.save();}
-    FocusScope.of(context).unfocus();
-    await _firestore.collection('user').doc(widget.uid).update({
-      "username" : newUsername,
-      "fullName" : newFullName,
-      "department" : widget.department,
-    }).then((value) => Navigator.pushReplacement(context,
-        MaterialPageRoute(
-            builder: (BuildContext context) => ProfilePage(uid: widget.uid))));
-
+      _formKey.currentState.save();
+      FocusScope.of(context).unfocus();
+      await _firestore.collection('user').doc(widget.uid).update({
+        "username": newUsername,
+        "fullName": newFullName,
+        "department": widget.department,
+      }).then((value) =>
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      ProfilePage(uid: widget.uid))));
+    }
   }
 
 

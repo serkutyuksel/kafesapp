@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:kafes_app/Screens/other_profile.dart';
 import 'package:kafes_app/Screens/post_page.dart';
 
 
@@ -53,6 +54,9 @@ class _PostFlowState extends State<PostFlow> {
               child: Column(
                 children: [
                   ListTile(
+                    onTap: () {
+                      Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc["postAuthorUid"])),);
+                    },
                     leading: CircleAvatar(
                     ),
                     title: Container(
