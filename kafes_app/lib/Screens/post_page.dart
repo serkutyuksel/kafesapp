@@ -4,9 +4,10 @@ import 'package:kafes_app/Components/post_page_flow.dart';
 
 class PostPage extends StatefulWidget {
 
-  PostPage({this.uid, this.postID});
+  PostPage({this.uid, this.postID, this.focusComment});
   final String uid;
   final String postID;
+  bool focusComment = false;
 
   @override
   _PostPageState createState() => _PostPageState();
@@ -18,7 +19,6 @@ class _PostPageState extends State<PostPage> {
   var postAuthorUsername = '';
   var postTitle = '';
   var postBody = '';
-  var postDate = DateTime.now();
   String postTopic = 'Genel';
 
 
@@ -46,7 +46,6 @@ class _PostPageState extends State<PostPage> {
     setState(() {
       postTitle = postData.get('postTitle');
       postBody = postData.get('postBody');
-      postDate = postData.get('postDate');
       postTopic = postData.get('postTopic');
       postAuthorUsername = postData.get('username');
     });
@@ -71,6 +70,67 @@ class _PostPageState extends State<PostPage> {
       ),
         body: Column(
           children: [
+            ListTile(
+              leading: CircleAvatar(
+              ),
+              title: Container(
+                constraints: new BoxConstraints(
+                  minHeight: 10.0,
+                  maxHeight: 40.0,
+                ),
+                padding: EdgeInsets.all(5),
+                child: Text(postAuthorUsername),
+              ),
+            ),
+            ListTile(
+              title: Container(
+                constraints: new BoxConstraints(
+                  minHeight: 10.0,
+                  maxHeight: 40.0,
+                ),
+                margin: EdgeInsets.all(5),
+                child: Text(postTitle, style: TextStyle(fontSize: 18),),
+              ),
+              subtitle: Container(
+                constraints: new BoxConstraints(
+                  minHeight: 10.0,
+                  maxHeight: 45.0,
+                ),
+                margin: EdgeInsets.all(5),
+                child: Text(postBody),
+              ),
+
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: Icon(Icons.favorite),
+                        iconSize: 30,
+                      ),
+                      IconButton(
+                        icon: Icon(Icons.comment),
+                        iconSize: 30,
+                        onPressed: (){
+                          setState(() {
+                            widget.focusComment = true;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                  MaterialButton(
+                      color: Colors.white,
+                      child: Text("Apply"),
+                      onPressed: (){}
+
+                  ),
+                ],),
+            ),
             PostPageFlow(uid: widget.uid, postID: widget.postID,),
             Row(
               children: [
@@ -83,6 +143,7 @@ class _PostPageState extends State<PostPage> {
                     border: Border.all(width: 2, color: Colors.redAccent)
                   ),
                   child: TextField(
+                    autofocus: widget.focusComment,
                     focusNode: _focusNode,
                     controller: _commentController,
                     decoration: InputDecoration(
