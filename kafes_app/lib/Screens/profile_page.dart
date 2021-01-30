@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:kafes_app/Screens/edit_profile.dart';
 import 'package:kafes_app/Screens/home_page.dart';
 import 'package:kafes_app/Screens/landing_page.dart';
-import 'package:kafes_app/Screens/login_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:kafes_app/Components/post_flow.dart';
 
@@ -14,7 +13,7 @@ class ProfilePage extends StatefulWidget {
 
   ProfilePage({this.uid});
   final String uid;
-
+  final bool profile = true;
 
   @override
   _ProfilePageState createState() => _ProfilePageState();

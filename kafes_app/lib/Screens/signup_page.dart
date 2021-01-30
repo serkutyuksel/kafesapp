@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:kafes_app/Screens/landing_page.dart';
+import 'package:kafes_app/Screens/welcome_page.dart';
 import 'package:kafes_app/Components/button_landing.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -32,6 +32,7 @@ class SignUpPageState extends State<SignUpPage> {
       try {
         result = await _auth.createUserWithEmailAndPassword(
             email: _mail, password: _password);
+        result.user.sendEmailVerification();
         FirebaseFirestore.instance.collection('user').doc(result.user.uid)
             .set({
           'username': _username,
@@ -44,7 +45,7 @@ class SignUpPageState extends State<SignUpPage> {
         });
         Navigator.pushReplacement(context,
             MaterialPageRoute(
-                builder: (BuildContext context) => LandingPage()));
+                builder: (BuildContext context) => WelcomePage()));
       }
       on FirebaseAuthException catch(error) {
         var warning = error.toString();

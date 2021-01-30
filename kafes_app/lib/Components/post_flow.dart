@@ -7,7 +7,7 @@ import 'package:kafes_app/Screens/post_page.dart';
 
 class PostFlow extends StatefulWidget {
 
-  PostFlow({this.uid});
+  PostFlow({this.uid,});
   final String uid;
 
   @override
@@ -129,7 +129,7 @@ class _PostFlowState extends State<PostFlow> {
               ),
             )).toList(),
           );
-        },
+          },
 
       ),
     );

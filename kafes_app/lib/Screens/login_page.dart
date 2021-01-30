@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Components/button_landing.dart';
 import 'package:kafes_app/Screens/home_page.dart';
+import 'package:kafes_app/Screens/reset_page.dart';
 
 class LoginPage extends StatefulWidget {
   LoginPageState createState() => LoginPageState();
@@ -22,9 +23,17 @@ class LoginPageState extends State<LoginPage> {
       try {
         result = await _auth.signInWithEmailAndPassword(
             email: _mail, password: _password);
-        Navigator.pushReplacement(context,
-            MaterialPageRoute(
-                builder: (BuildContext context) => HomePage(uid: result.user.uid)));
+        if(result.user.emailVerified) {
+          Navigator.pushReplacement(context,
+              MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      HomePage(uid: result.user.uid)));
+        }
+        else{
+          Scaffold.of(context).showSnackBar(SnackBar(content: Text(
+            "Please Verify Your Email!"
+          ),),);
+        }
       }
       on FirebaseAuthException catch(error) {
         var warning = error.toString();
@@ -83,7 +92,20 @@ class LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 SizedBox(
-                  height: 50,
+                  height: 10.0,
+                ),
+                FlatButton(
+                    child: Text("Forgot Password",
+                      style: TextStyle(
+                        color: Colors.redAccent,
+                      ),
+                    ),
+                  onPressed: () { Navigator.pushReplacement(context,
+                      MaterialPageRoute(
+                          builder: (BuildContext context) => ResetPage()));}
+                ),
+                SizedBox(
+                  height: 10.0,
                 ),
                 ButtonLanding(
                     buttonLabel: 'Login',

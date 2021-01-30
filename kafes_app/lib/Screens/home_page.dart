@@ -8,7 +8,7 @@ import 'package:kafes_app/Screens/profile_page.dart';
 
 class HomePage extends StatefulWidget {
 
-  HomePage({this.uid});
+  HomePage({this.uid,});
   final String uid;
 
   @override
