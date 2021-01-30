@@ -4,6 +4,7 @@ import 'package:kafes_app/Screens/new_post.dart';
 import 'package:kafes_app/Screens/post_page.dart';
 import 'package:kafes_app/Screens/profile_page.dart';
 import 'package:kafes_app/Screens/welcome_page.dart';
+import 'package:kafes_app/Screens/reset_page.dart';
 import 'Screens//login_page.dart';
 import 'Screens//signup_page.dart';
 import 'Screens//home_page.dart';
@@ -32,6 +33,7 @@ class KafesApp extends StatelessWidget {
         '/profile' : (context) => ProfilePage(),
         '/post_page' : (context) => PostPage(),
         '/welcome_page': (context) => WelcomePage(),
+        '/reset_page': (context) => ResetPage(),
       },
     );
   }
