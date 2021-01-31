@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Screens/edit_profile.dart';
@@ -154,7 +155,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       RaisedButton(
                         padding: EdgeInsets.all(10),
                         color: Colors.redAccent,
-                        onPressed: () {
+                        onPressed: () async {
+                          await FirebaseAuth.instance.signOut();
                           Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => LandingPage()));
                         },
                         child: Text('Log Out'),

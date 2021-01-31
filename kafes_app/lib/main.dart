@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Screens/new_post.dart';
@@ -23,7 +24,7 @@ class KafesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: LandingPage(),
+      home: AuthenticationListener(),
       routes: {
         '/login' : (context) => LoginPage(),
         '/signup' : (context) => SignUpPage(),
@@ -36,6 +37,19 @@ class KafesApp extends StatelessWidget {
         '/reset_page': (context) => ResetPage(),
       },
     );
+  }
+}
+
+class AuthenticationListener extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final user = FirebaseAuth.instance.currentUser;
+    if(user != null) {
+      return HomePage(uid: user.uid);
+    }
+    else {
+      return LandingPage();
+    }
   }
 }
 

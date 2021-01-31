@@ -115,7 +115,7 @@ class _ResetPageState extends State<ResetPage> {
                 height: 10.0,
               ),
               ButtonLanding(
-                buttonLabel: "Send Verification Mail",
+                buttonLabel: "Send Password Reset Mail",
                 onPress: () {
                   _submit();
                 },
