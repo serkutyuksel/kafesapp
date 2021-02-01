@@ -31,15 +31,6 @@ class _NewPostState extends State<NewPost> {
     FocusScope.of(context).unfocus();
     if (isValid) {
       _formKey.currentState.save();
-      FirebaseFirestore.instance.collection('user').doc(widget.uid).collection('posts')
-          .doc(postTitle).set({
-        'postTitle' : postTitle,
-        'postBody' : postBody,
-        'postTopic' : postTopic,
-        'postDate': postDate,
-        'postAuthorUsername' : postAuthorUsername,
-        'postAuthorUid' : widget.uid
-      });
       FirebaseFirestore.instance.collection('post').doc().set(
           {'postTitle': postTitle,
             'postBody': postBody,
@@ -65,8 +56,6 @@ class _NewPostState extends State<NewPost> {
       postAuthorUsername = userData.get('username');
     });
   }
-
-
 
 
   @override

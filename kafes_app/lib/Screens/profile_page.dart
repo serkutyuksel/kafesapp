@@ -178,7 +178,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       },
                       body: Column(
                         children: [
-                          PostFlow(uid: widget.uid,isHomePage: false,),
+                          PostFlow(uid: widget.uid),
                         ],
                       ),),
                   ),
