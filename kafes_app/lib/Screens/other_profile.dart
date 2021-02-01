@@ -174,7 +174,7 @@ class _OtherProfileState extends State<OtherProfile> {
                       },
                       body: Column(
                         children: [
-                          PostFlow(uid: widget.otherUid),
+                          PostFlow(uid: widget.uid),
                         ],
                       ),),
                   ),
