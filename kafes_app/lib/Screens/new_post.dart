@@ -32,7 +32,7 @@ class _NewPostState extends State<NewPost> {
     if (isValid) {
       _formKey.currentState.save();
       FirebaseFirestore.instance.collection('user').doc(widget.uid).collection('posts')
-          .doc('userPosts').set({
+          .doc(postTitle).set({
         'postTitle' : postTitle,
         'postBody' : postBody,
         'postTopic' : postTopic,
