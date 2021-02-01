@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
           },
           body: Column(
         children: [
-          PostFlow(uid: widget.uid,),
+          PostFlow(uid: widget.uid,isHomePage: true),
         ],
       ),),
       floatingActionButton: FloatingActionButton(onPressed: (){

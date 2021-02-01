@@ -7,8 +7,9 @@ import 'package:kafes_app/Screens/post_page.dart';
 
 class PostFlow extends StatefulWidget {
 
-  PostFlow({this.uid,});
+  PostFlow({this.uid,this.isHomePage});
   final String uid;
+  final bool isHomePage;
 
   @override
   _PostFlowState createState() => _PostFlowState();
@@ -36,13 +37,22 @@ class _PostFlowState extends State<PostFlow> {
 
     return Expanded(
       child: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('post').snapshots(),
+        stream: widget.isHomePage ? FirebaseFirestore.instance.collection('post').snapshots()
+        : FirebaseFirestore.instance.collection('user').doc(widget.uid).collection('posts')
+        .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot ){
           if(snapshot.hasError){
             return Text('Error: $snapshot.error');
           }
           if(snapshot.connectionState == ConnectionState.waiting){
             return Text('Loading...');
+          }
+          if(snapshot.data.size<1){
+            return Text(
+              "This user did not post anything yet",
+              style: TextStyle(color: Colors.redAccent,fontSize: 20.0),
+            );
+
           }
           return ListView(
             children: snapshot.data.docs.map((doc) => Container(
@@ -130,7 +140,6 @@ class _PostFlowState extends State<PostFlow> {
             )).toList(),
           );
           },
-
       ),
     );
   }

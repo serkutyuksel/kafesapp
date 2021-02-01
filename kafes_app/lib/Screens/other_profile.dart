@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Screens/home_page.dart';
+import 'package:kafes_app/Screens/profile_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:kafes_app/Components/post_flow.dart';
 
@@ -89,6 +90,9 @@ class _OtherProfileState extends State<OtherProfile> {
 
   @override
   Widget build(BuildContext context) {
+    if(widget.uid == widget.otherUid) {
+      return ProfilePage(uid: widget.uid,);
+    }
     return MaterialApp(
         home: Scaffold(
           backgroundColor: Colors.white,
@@ -170,7 +174,7 @@ class _OtherProfileState extends State<OtherProfile> {
                       },
                       body: Column(
                         children: [
-                          PostFlow(uid: widget.uid,),
+                          PostFlow(uid: widget.otherUid,isHomePage: false),
                         ],
                       ),),
                   ),

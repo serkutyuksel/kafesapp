@@ -20,7 +20,7 @@ class _NewPostState extends State<NewPost> {
   var postTitle = '';
   var postBody = '';
   var postDate = DateTime.now();
-  String postTopic = 'Genel';
+  String postTopic = 'General';
   var postAuthorUsername = '';
   String postID = '' ;
 
@@ -31,6 +31,15 @@ class _NewPostState extends State<NewPost> {
     FocusScope.of(context).unfocus();
     if (isValid) {
       _formKey.currentState.save();
+      FirebaseFirestore.instance.collection('user').doc(widget.uid).collection('posts')
+          .doc('userPosts').set({
+        'postTitle' : postTitle,
+        'postBody' : postBody,
+        'postTopic' : postTopic,
+        'postDate': postDate,
+        'postAuthorUsername' : postAuthorUsername,
+        'postAuthorUid' : widget.uid
+      });
       FirebaseFirestore.instance.collection('post').doc().set(
           {'postTitle': postTitle,
             'postBody': postBody,
@@ -38,9 +47,6 @@ class _NewPostState extends State<NewPost> {
             'postDate': postDate,
             'postAuthorUsername' : postAuthorUsername,
             'postAuthorUid': widget.uid}).whenComplete(() =>
-
-          //TODO: Posts will be added to also user's "userPosts" collection.
-          //FirebaseFirestore.instance.collection('user').doc(widget.uid).collection('userPosts').doc().set({}).whenComplete(() =>)
               Navigator.push(context,
                   MaterialPageRoute(
                    builder: (BuildContext context) => HomePage(uid: widget.uid))));
@@ -71,85 +77,87 @@ class _NewPostState extends State<NewPost> {
         title: Text("New Post"),
         backgroundColor: Colors.redAccent,
       ),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0,),
-              child: TextFormField(
-                style: TextStyle(color: Colors.red),
-                key: ValueKey('postTitle'),
-                validator: (value) {
-                  if(value.isEmpty || value.length < 6 ) {
-                    return 'Post Title length must be at least 6';
-                  }
-                  return null;
-                },
-                onSaved: (value){
-                  postTitle = value;
-                },
-                decoration: InputDecoration(
-                    labelText: 'Enter Post Title'
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20.0,),
-              child: TextFormField(
-                maxLines: 10,
-                style: TextStyle(color: Colors.red),
-                key: ValueKey('postBody'),
-                validator: (value) {
-                  if(value.isEmpty || value.length < 6 ) {
-                    return 'Post Body length must be at least 6';
-                  }
-                  return null;
-                },
-                onSaved: (value){
-                  postBody = value;
-                },
-                decoration: InputDecoration(
-                    labelText: 'Enter Post Body'
-                ),
-              ),
-            ),
-            Container (
-              margin: EdgeInsets.symmetric(horizontal: 20.0),
-              child: DropdownButton<String>(
-                  hint: Text("Choose Topic"),
-                  isExpanded: true,
-                  value: postTopic,
-                  elevation: 15,
-                  style: TextStyle(color: Colors.redAccent),
-                  underline: Container(
-                    height: 1,
-                    color: Colors.grey,
-                  ),
-                  onChanged: (String newValue){
-                    setState(() {
-                      postTopic = newValue;
-                    });
+      body: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.0,),
+                child: TextFormField(
+                  style: TextStyle(color: Colors.red),
+                  key: ValueKey('postTitle'),
+                  validator: (value) {
+                    if(value.isEmpty || value.length < 6 ) {
+                      return 'Post Title length must be at least 6';
+                    }
+                    return null;
                   },
-                  items: ["Genel","Computer Engineering","Software Engineering","Aerospace Engineering",
-                    "Biomedical Engineering","Civil Engineering", "Electrical and Electronics Engineering",
-                    "Food Engineering", "Genetics and Bioengineering", "Industrial Engineering",
-                    "Mechanical Engineering", "Mechatronics Engineering", "Mathematics", "Physics",
-                    "English Translation and Interpreting", "Psychology", "Sociology", "Architecture",
-                    "Industrial Design", "Interior Architecture and Environmental Design", "Textile and Fashion Design",
-                    "Visual Communication Design", "Law", "Cinema and Digital Media", "New Media and Communication",
-                    "Public Relations and Advertising", "Accounting and Auditing Program", "Business Administration",
-                    "Economics", "International Trade and Finance", "Logistics Management", "Health Management", "Nursing",
-                    "Medicine",]
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList()
+                  onSaved: (value){
+                    postTitle = value;
+                  },
+                  decoration: InputDecoration(
+                      labelText: 'Enter Post Title'
+                  ),
+                ),
               ),
-            ),
-          ],
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 20.0,),
+                child: TextFormField(
+                  maxLines: 10,
+                  style: TextStyle(color: Colors.red),
+                  key: ValueKey('postBody'),
+                  validator: (value) {
+                    if(value.isEmpty || value.length < 6 ) {
+                      return 'Post Body length must be at least 6';
+                    }
+                    return null;
+                  },
+                  onSaved: (value){
+                    postBody = value;
+                  },
+                  decoration: InputDecoration(
+                      labelText: 'Enter Post Body'
+                  ),
+                ),
+              ),
+              Container (
+                margin: EdgeInsets.symmetric(horizontal: 20.0),
+                child: DropdownButton<String>(
+                    hint: Text("Choose Topic"),
+                    isExpanded: true,
+                    value: postTopic,
+                    elevation: 15,
+                    style: TextStyle(color: Colors.redAccent),
+                    underline: Container(
+                      height: 1,
+                      color: Colors.grey,
+                    ),
+                    onChanged: (String newValue){
+                      setState(() {
+                        postTopic = newValue;
+                      });
+                    },
+                    items: ["General","Computer Engineering","Software Engineering","Aerospace Engineering",
+                      "Biomedical Engineering","Civil Engineering", "Electrical and Electronics Engineering",
+                      "Food Engineering", "Genetics and Bioengineering", "Industrial Engineering",
+                      "Mechanical Engineering", "Mechatronics Engineering", "Mathematics", "Physics",
+                      "English Translation and Interpreting", "Psychology", "Sociology", "Architecture",
+                      "Industrial Design", "Interior Architecture and Environmental Design", "Textile and Fashion Design",
+                      "Visual Communication Design", "Law", "Cinema and Digital Media", "New Media and Communication",
+                      "Public Relations and Advertising", "Accounting and Auditing Program", "Business Administration",
+                      "Economics", "International Trade and Finance", "Logistics Management", "Health Management", "Nursing",
+                      "Medicine",]
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList()
+                ),
+              ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(onPressed: (){
