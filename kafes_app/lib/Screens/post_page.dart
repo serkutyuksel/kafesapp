@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Components/post_page_flow.dart';
+import 'package:kafes_app/Screens/other_profile.dart';
 
 class PostPage extends StatefulWidget {
 
@@ -19,9 +21,10 @@ class _PostPageState extends State<PostPage> {
   var postAuthorUsername = '';
   var postTitle = '';
   var postBody = '';
+  var postAuthorUid = '';
   String postTopic = 'Genel';
-
-
+  var postData;
+  var control = false;
   final TextEditingController _commentController = TextEditingController();
   CollectionReference _ref;
   FocusNode _focusNode;
@@ -42,13 +45,18 @@ class _PostPageState extends State<PostPage> {
   }
 
   void getPostData() async {
-    final postData = await FirebaseFirestore.instance.collection('post').doc(widget.postID).get();
+    postData = await FirebaseFirestore.instance.collection('post').doc(widget.postID).get();
     setState(() {
       postTitle = postData.get('postTitle');
       postBody = postData.get('postBody');
       postTopic = postData.get('postTopic');
-      postAuthorUsername = postData.get('username');
+      postAuthorUsername = postData.get('postAuthorUsername');
+      postAuthorUid = postData.get('postAuthorUid');
     });
+    Timer(Duration(seconds: 1), () => setState(() {
+      control = true;
+      })
+    );
   }
 
   void getCommentAuthorUsername() async {
@@ -59,18 +67,30 @@ class _PostPageState extends State<PostPage> {
   }
 
 
-
-
   @override
   Widget build(BuildContext context) {
+    if(control == false) {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text('$postTitle'),
+          backgroundColor: Colors.redAccent,
+        ),
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
-        title: Text('${widget.postID}'),
+        title: Text('$postTitle'),
         backgroundColor: Colors.redAccent,
       ),
         body: Column(
           children: [
             ListTile(
+              onTap: () {
+                Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: postAuthorUid)),);
+              },
               leading: CircleAvatar(
               ),
               title: Container(
@@ -79,7 +99,7 @@ class _PostPageState extends State<PostPage> {
                   maxHeight: 40.0,
                 ),
                 padding: EdgeInsets.all(5),
-                child: Text(postAuthorUsername),
+                child: Text('$postAuthorUsername'),
               ),
             ),
             ListTile(
@@ -106,28 +126,10 @@ class _PostPageState extends State<PostPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        icon: Icon(Icons.favorite),
-                        iconSize: 30,
-                      ),
-                      IconButton(
-                        icon: Icon(Icons.comment),
-                        iconSize: 30,
-                        onPressed: (){
-                          setState(() {
-                            widget.focusComment = true;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
                   MaterialButton(
-                      color: Colors.white,
-                      child: Text("Apply"),
+                      color: Colors.redAccent,
+                      child: Text("Apply This Project"),
                       onPressed: (){}
-
                   ),
                 ],),
             ),
@@ -172,7 +174,6 @@ class _PostPageState extends State<PostPage> {
             ),
           ],
         ),
-
     );
   }
 }

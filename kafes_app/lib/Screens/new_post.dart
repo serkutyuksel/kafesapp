@@ -23,8 +23,7 @@ class _NewPostState extends State<NewPost> {
   String postTopic = 'General';
   var postAuthorUsername = '';
   String postID = '' ;
-
-
+  var likeNumber = 0;
 
   void submitPost() async {
     final isValid = _formKey.currentState.validate();
@@ -33,6 +32,7 @@ class _NewPostState extends State<NewPost> {
       _formKey.currentState.save();
       FirebaseFirestore.instance.collection('post').doc().set(
           {'postTitle': postTitle,
+            'likes' : likeNumber,
             'postBody': postBody,
             'postTopic' : postTopic,
             'postDate': postDate,
@@ -41,7 +41,6 @@ class _NewPostState extends State<NewPost> {
               Navigator.push(context,
                   MaterialPageRoute(
                    builder: (BuildContext context) => HomePage(uid: widget.uid))));
-
     }
   }
 

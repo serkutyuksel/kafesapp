@@ -36,7 +36,7 @@ class _HomePageState extends State<HomePage> {
           Icon(
             CupertinoIcons.search_circle,
             color: Colors.white,
-            size: 30.0,
+            size: 40.0,
           ),
         ],
         backgroundColor: Colors.redAccent,
@@ -55,7 +55,7 @@ class _HomePageState extends State<HomePage> {
           },
           body: Column(
         children: [
-          PostFlow(uid: widget.uid),
+          PostFlow(uid: widget.uid, isHomePage: true, otherUid: widget.uid),
         ],
       ),),
       floatingActionButton: FloatingActionButton(onPressed: (){

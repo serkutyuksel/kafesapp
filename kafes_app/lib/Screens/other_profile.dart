@@ -91,7 +91,7 @@ class _OtherProfileState extends State<OtherProfile> {
   @override
   Widget build(BuildContext context) {
     if(widget.uid == widget.otherUid) {
-      return ProfilePage(uid: widget.uid,);
+      return ProfilePage(uid: widget.uid);
     }
     return MaterialApp(
         home: Scaffold(
@@ -174,7 +174,7 @@ class _OtherProfileState extends State<OtherProfile> {
                       },
                       body: Column(
                         children: [
-                          PostFlow(uid: widget.uid),
+                          PostFlow(uid: widget.uid, isHomePage: false, otherUid: widget.otherUid),
                         ],
                       ),),
                   ),
