@@ -18,10 +18,22 @@ class _WhoLikedState extends State<WhoLiked> {
         backgroundColor: Colors.redAccent,
         title: Text('Likes'),
       ),
-      body: Column(
-        children: [
-          UserFlow(uid: widget.uid, docId: widget.docId),
-        ],
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, innerBoxIsScrolled){
+          return[
+            SliverAppBar(
+              floating: true,
+              snap: true,
+              title: Text("Likes Sent by", style: TextStyle(color: Colors.redAccent),),
+              backgroundColor: Colors.white,
+            )
+          ];
+        },
+        body: Column(
+          children: [
+            UserFlow(uid: widget.uid, docId: widget.docId),
+          ],
+        ),
       ),
     );
   }

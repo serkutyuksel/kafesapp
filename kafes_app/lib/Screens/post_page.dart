@@ -22,7 +22,7 @@ class _PostPageState extends State<PostPage> {
   var postTitle = '';
   var postBody = '';
   var postAuthorUid = '';
-  String postTopic = 'Genel';
+  String postTopic = 'General';
   var postData;
   var control = false;
   final TextEditingController _commentController = TextEditingController();
@@ -119,7 +119,16 @@ class _PostPageState extends State<PostPage> {
                 margin: EdgeInsets.all(5),
                 child: Text(postBody),
               ),
-
+            ),
+            ListTile(
+              title: Container(
+                constraints: new BoxConstraints(
+                  minHeight: 10.0,
+                  maxHeight: 40.0,
+                ),
+                margin: EdgeInsets.all(5),
+                child: Text("#" + postTopic, style: TextStyle(fontSize: 15, color: Colors.blue),),
+              ),
             ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 20),

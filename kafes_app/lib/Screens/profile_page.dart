@@ -8,6 +8,8 @@ import 'package:kafes_app/Screens/landing_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:kafes_app/Components/post_flow.dart';
 
+import 'edit_page.dart';
+
 
 
 class ProfilePage extends StatefulWidget {
@@ -153,6 +155,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         width:10 ,
                       ),
                       RaisedButton(
+                        color: Colors.redAccent,
+                        onPressed: () {
+                          Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => EditPage(uid: widget.uid)));
+                        },
+                        child: Text('Edit My Posts'),
+                      ),
+                      SizedBox(
+                        width:10 ,
+                      ),
+                      RaisedButton(
                         padding: EdgeInsets.all(10),
                         color: Colors.redAccent,
                         onPressed: () async {
@@ -178,7 +190,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       },
                       body: Column(
                         children: [
-                          PostFlow(uid: widget.uid, isHomePage: false, otherUid: widget.uid),
+                          PostFlow(uid: widget.uid, isHomePage: false, otherUid: widget.uid, editProfile: false),
                         ],
                       ),),
                   ),

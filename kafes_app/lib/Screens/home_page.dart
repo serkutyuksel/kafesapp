@@ -33,11 +33,7 @@ class _HomePageState extends State<HomePage> {
         },),
         title: Text("Kafes", style: TextStyle(color: Colors.white),),
         actions: [
-          Icon(
-            CupertinoIcons.search_circle,
-            color: Colors.white,
-            size: 40.0,
-          ),
+          IconButton(icon: Icon(CupertinoIcons.search_circle), onPressed: (){})
         ],
         backgroundColor: Colors.redAccent,
       ),
@@ -55,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           },
           body: Column(
         children: [
-          PostFlow(uid: widget.uid, isHomePage: true, otherUid: widget.uid),
+          PostFlow(uid: widget.uid, isHomePage: true, otherUid: widget.uid, editProfile: false),
         ],
       ),),
       floatingActionButton: FloatingActionButton(onPressed: (){
