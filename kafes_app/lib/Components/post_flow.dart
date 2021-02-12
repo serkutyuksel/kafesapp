@@ -122,7 +122,7 @@ class _PostFlowState extends State<PostFlow> {
                       onTap: (){
                         Navigator.push(context,
                             MaterialPageRoute(
-                                builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: false,)));
+                                builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: false, user: username,)));
                       },
                       onLongPress: (){
                         postOptions(context);
@@ -186,7 +186,7 @@ class _PostFlowState extends State<PostFlow> {
                                 onPressed: (){
                                   Navigator.push(context,
                                       MaterialPageRoute(
-                                          builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: true,)));
+                                          builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: true, user: username)));
                                 },
                               ),
                             ],
@@ -267,7 +267,7 @@ class _PostFlowState extends State<PostFlow> {
                       onTap: (){
                         Navigator.push(context,
                             MaterialPageRoute(
-                                builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: false,)));
+                                builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: false, user: username,)));
                       },
                       onLongPress: (){
                         postOptions(context);
@@ -331,7 +331,7 @@ class _PostFlowState extends State<PostFlow> {
                                 onPressed: (){
                                   Navigator.push(context,
                                       MaterialPageRoute(
-                                          builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: true,)));
+                                          builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: true, user: username)));
                                 },
                               ),
                             ],
@@ -393,7 +393,7 @@ class _PostFlowState extends State<PostFlow> {
                     onTap: (){
                       Navigator.push(context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: false,)));
+                              builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: false, user: username)));
                     },
                     onLongPress: (){
                       postOptions(context);
@@ -457,7 +457,7 @@ class _PostFlowState extends State<PostFlow> {
                               onPressed: (){
                                 Navigator.push(context,
                                 MaterialPageRoute(
-                                    builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: true,)));
+                                    builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: true, user: username)));
                               },
                             ),
                           ],

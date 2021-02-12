@@ -3,12 +3,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Components/post_page_flow.dart';
 import 'package:kafes_app/Screens/other_profile.dart';
+import 'package:kafes_app/Screens/who_applied.dart';
 
 class PostPage extends StatefulWidget {
 
-  PostPage({this.uid, this.postID, this.focusComment});
+  PostPage({this.uid, this.postID, this.focusComment, this.user});
   final String uid;
   final String postID;
+  final String user;
   bool focusComment = false;
 
   @override
@@ -25,6 +27,8 @@ class _PostPageState extends State<PostPage> {
   String postTopic = 'General';
   var postData;
   var control = false;
+  var status = false;
+  var isMyPost = false;
   final TextEditingController _commentController = TextEditingController();
   CollectionReference _ref;
   FocusNode _focusNode;
@@ -33,6 +37,7 @@ class _PostPageState extends State<PostPage> {
   void initState() {
     getCommentAuthorUsername();
     getPostData();
+    applyStatus();
     _ref = FirebaseFirestore.instance.collection('post/${widget.postID}/comments');
     _focusNode = FocusNode();
     super.initState();
@@ -42,6 +47,67 @@ class _PostPageState extends State<PostPage> {
   void dispose() {
     _focusNode.dispose();
     super.dispose();
+  }
+
+  void applyStatus() async {
+    await FirebaseFirestore.instance.collection('post').doc(widget.postID)
+        .collection('applied').get().then((queryApply) => {
+      queryApply.docs.forEach((element) {
+        if(element.id == widget.uid) {
+          setState(() {
+            status = true;
+          });
+        }
+      })
+    }
+    );
+  }
+
+  void applyDialog() async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(status?"Pull Apply Back":"Apply This Project", style: TextStyle(color: Colors.redAccent),),
+            content: SingleChildScrollView(
+              child: ListBody(
+                children: [
+                  Text(status?"Pull Your Request Back From This Project?: ":"Really Want to Apply This Project?: "),
+                  Text(postTitle),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                  child: Text(status?"Pull Back":"Apply", style: TextStyle(color: Colors.redAccent),),
+                  onPressed: () async{
+                    status ? FirebaseFirestore.instance.collection('post').doc(widget.postID)
+                        .collection('applied').doc(widget.uid).delete()
+                     : FirebaseFirestore.instance.collection('post').doc(widget.postID)
+                        .collection('applied').doc(widget.uid).set({'isApplied': widget.user});
+                    setState(() {
+                      status = !status;
+                    });
+                    Navigator.of(context).pop();
+                  }
+              ),
+              TextButton(
+                child: Text("Cancel", style: TextStyle(color: Colors.redAccent),),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        }
+    );
+  }
+
+  void seeApplicants() {
+    Navigator.push(context,
+        MaterialPageRoute(
+            builder: (BuildContext context) => WhoApplied(uid: widget.uid, docId: widget.postID)));
   }
 
   void getPostData() async {
@@ -66,9 +132,13 @@ class _PostPageState extends State<PostPage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
+    if(postAuthorUid == widget.uid) {
+      setState(() {
+        isMyPost = true;
+      });
+    }
     if(control == false) {
       return Scaffold(
         appBar: AppBar(
@@ -137,8 +207,10 @@ class _PostPageState extends State<PostPage> {
                 children: [
                   MaterialButton(
                       color: Colors.redAccent,
-                      child: Text("Apply This Project"),
-                      onPressed: (){}
+                      child: Text(isMyPost?"See Applicants":(status?"Pull Apply Back":"Apply this project!")),
+                      onPressed: (){
+                        isMyPost?seeApplicants():applyDialog();
+                      }
                   ),
                 ],),
             ),

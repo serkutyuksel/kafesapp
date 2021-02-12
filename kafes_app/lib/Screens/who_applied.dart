@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:kafes_app/Components/user_flow.dart';
 
-class WhoLiked extends StatefulWidget {
-  WhoLiked({this.docId,this.uid});
+class WhoApplied extends StatefulWidget {
+  WhoApplied({this.docId,this.uid});
   final docId;
   final uid;
   @override
-  _WhoLikedState createState() => _WhoLikedState();
+  _WhoAppliedState createState() => _WhoAppliedState();
 }
 
 
-class _WhoLikedState extends State<WhoLiked> {
+class _WhoAppliedState extends State<WhoApplied> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text('Likes'),
+        title: Text('Applicants'),
       ),
       body: NestedScrollView(
         headerSliverBuilder: (BuildContext context, innerBoxIsScrolled){
@@ -24,14 +24,14 @@ class _WhoLikedState extends State<WhoLiked> {
             SliverAppBar(
               floating: true,
               snap: true,
-              title: Text("Likes Sent by", style: TextStyle(color: Colors.redAccent),),
+              title: Text("Applies Sent by", style: TextStyle(color: Colors.redAccent),),
               backgroundColor: Colors.white,
             )
           ];
         },
         body: Column(
           children: [
-            UserFlow(uid: widget.uid, docId: widget.docId,isLike: true),
+            UserFlow(uid: widget.uid, docId: widget.docId,isLike: false),
           ],
         ),
       ),

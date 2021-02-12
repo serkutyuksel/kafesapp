@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:kafes_app/Screens/other_profile.dart';
 
 class UserFlow extends StatefulWidget {
-  UserFlow({this.docId,this.uid});
+  UserFlow({this.docId,this.uid,this.isLike});
   final docId;
   final uid;
+  final isLike;
   @override
   _UserFlowState createState() => _UserFlowState();
 }
@@ -14,8 +15,9 @@ class _UserFlowState extends State<UserFlow> {
   CollectionReference docRef;
 
   void initState() {
-    docRef = FirebaseFirestore.instance.collection('post')
-        .doc(widget.docId).collection('liked');
+    widget.isLike ? docRef = FirebaseFirestore.instance.collection('post')
+        .doc(widget.docId).collection('liked') : docRef = FirebaseFirestore.instance
+        .collection('post').doc(widget.docId).collection('applied');
     super.initState();
   }
 
@@ -52,7 +54,7 @@ class _UserFlowState extends State<UserFlow> {
                           maxHeight: 40.0,
                         ),
                         padding: EdgeInsets.all(5),
-                        child: Text(doc['isLiked']),
+                        child: Text(widget.isLike?doc['isLiked']:doc['isApplied']),
                       ),
                     ),
                   ],
