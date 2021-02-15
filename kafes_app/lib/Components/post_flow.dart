@@ -17,6 +17,7 @@ class PostFlow extends StatefulWidget {
   final String otherUid;
   final bool editProfile;
 
+
   @override
   _PostFlowState createState() => _PostFlowState();
 }
@@ -24,6 +25,7 @@ class PostFlow extends StatefulWidget {
 class _PostFlowState extends State<PostFlow> {
   String imageUrl;
   bool imageLoading = false;
+  final firestore = FirebaseFirestore.instance;
   firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
 
   getImageUrl() async {
@@ -58,6 +60,15 @@ class _PostFlowState extends State<PostFlow> {
               TextButton(
                   child: Text("Delete", style: TextStyle(color: Colors.redAccent),),
                   onPressed: () async{
+                    await firestore.collection('post').doc(docID).collection("liked").get().then((snapshot) {
+                      for (DocumentSnapshot ds in snapshot.docs){
+                        ds.reference.delete();
+                      }});
+                    await firestore.collection('post').doc(docID).collection("applied").get().then((snapshot) {
+                      for (DocumentSnapshot ds in snapshot.docs){
+                        ds.reference.delete();
+                      }});
+
                     await FirebaseFirestore.instance.collection('post').doc(docID).delete();
                     Navigator.of(context).pop();
                   }
