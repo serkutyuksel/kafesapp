@@ -5,6 +5,7 @@ import 'package:kafes_app/Screens/home_page.dart';
 import 'package:kafes_app/Screens/profile_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:kafes_app/Components/post_flow.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 
 
@@ -19,13 +20,16 @@ class OtherProfile extends StatefulWidget {
 }
 
 class _OtherProfileState extends State<OtherProfile> {
+  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
   final _firestore = FirebaseFirestore.instance;
   var username = "";
   var email = "";
   var department = "";
   var fullName = "";
   var gender = "";
-  var profilePic = "";
+  String fileName;
+  String imageUrl;
+  bool imageLoading = false;
 
   @override
   void initState() {
@@ -34,7 +38,7 @@ class _OtherProfileState extends State<OtherProfile> {
     getDepartment();
     getFullName();
     getGender();
-    getProfilePic();
+    getImageUrl();
   }
 
     void getUsername() async {
@@ -72,14 +76,17 @@ class _OtherProfileState extends State<OtherProfile> {
        });
 
   }
-
-  void getProfilePic() async {
-    final userData = await _firestore.collection('user').doc(widget.otherUid).get();
+  getImageUrl() async {
     setState(() {
-      profilePic = userData.get('profilePic');
+      imageLoading = true;
     });
-
+    final ref = storage.ref().child(widget.otherUid);
+    imageUrl = await ref.getDownloadURL();
+    setState(() {
+      imageLoading = false;
+    });
   }
+
 
   void customLaunch(command) async {
     if(await canLaunch(command)){
@@ -119,7 +126,7 @@ class _OtherProfileState extends State<OtherProfile> {
                             width: 130.0,
                             margin: EdgeInsets.all(20.0),
                             child: CircleAvatar(
-                              backgroundImage: AssetImage("assets/images/icon.jpg") ,
+                              backgroundImage: NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl) ,
                               radius: 50.0,
                               ),
                             ),

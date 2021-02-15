@@ -1,6 +1,16 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:kafes_app/Screens/profile_page.dart';
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
+
+
+
+
 
 
 class EditProfile extends StatefulWidget {
@@ -10,6 +20,7 @@ class EditProfile extends StatefulWidget {
   final String gender;
   final String fullName;
   String department;
+  String imageUrl;
 
   EditProfile({
     this.uid,
@@ -18,6 +29,7 @@ class EditProfile extends StatefulWidget {
     this.gender,
     this.fullName,
     this.department,
+    this.imageUrl,
 
   });
 
@@ -28,6 +40,51 @@ class EditProfile extends StatefulWidget {
 
 
 class _EditProfileState extends State<EditProfile> {
+
+  File _image;
+  final picker = ImagePicker();
+  String fileName;
+  String imageUrl;
+  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+  bool imageLoading = false;
+
+  getImageUrl() async {
+    setState(() {
+      imageLoading = true;
+    });
+    final ref = storage.ref("profilePic").child(widget.uid);
+    imageUrl = await ref.getDownloadURL();
+    Timer(Duration(seconds: 1), () => setState(() {
+      imageLoading = false;
+    }),);
+
+  }
+
+  Future getImage() async {
+    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    setState(() {
+        _image = File(pickedFile.path);
+        imageUrl = getImageUrl();
+    });
+  }
+  Future<void> uploadFile() async {
+    fileName = widget.uid;
+    if (storage.ref("profilePic").child(fileName) == null){
+    await storage.ref("profilePic/$fileName").putFile(_image);
+    }
+    else {
+      await storage.ref("profilePic/$fileName").delete().whenComplete(() => storage.ref("profilePic/$fileName").putFile(_image));
+    }
+    setState(() {
+      imageUrl = getImageUrl();
+    });
+  }
+
+  changeProfilePic() {
+    getImage().whenComplete(() => uploadFile().whenComplete(() => getImageUrl()));
+  }
+
+
 
   TextEditingController fullName, username,email,gender;
   final _formKey = GlobalKey<FormState>();
@@ -48,25 +105,31 @@ class _EditProfileState extends State<EditProfile> {
           Navigator.pushReplacement(context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      ProfilePage(uid: widget.uid))));
+                      ProfilePage(uid: widget.uid, profilePic: widget.imageUrl))));
     }
   }
 
 
   @override
   void initState() {
-   fullName = new TextEditingController(text: widget.fullName);
-   username = new TextEditingController(text: widget.username);
-   gender = new TextEditingController(text: widget.gender);
-   email = new TextEditingController(text: widget.email);
+    fullName = new TextEditingController(text: widget.fullName);
+    username = new TextEditingController(text: widget.username);
+    gender = new TextEditingController(text: widget.gender);
+    email = new TextEditingController(text: widget.email);
+    imageUrl = widget.imageUrl;
 
   }
 
 
   @override
   Widget build(BuildContext context) {
-
-
+    if(imageLoading == true) {
+      return Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    }
     return Scaffold(
       resizeToAvoidBottomInset: true,
       resizeToAvoidBottomPadding: true,
@@ -77,8 +140,25 @@ class _EditProfileState extends State<EditProfile> {
           child: SingleChildScrollView(
             child: Column(
               children: [
+                SizedBox(
+                  height: 15,
+                ),
                 Container(
-                  //TODO: ADD PROFILE PICTURE EDITING
+                  child: CircleAvatar(
+                    backgroundImage: NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
+                    radius: 50.0,
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      onPressed: changeProfilePic,
+                      color: Colors.white70,
+                      icon: Icon(
+                        Icons.photo,
+                      )
+                    )
+                  ),
+                ),
+                SizedBox(
+                  height: 15,
                 ),
                 Container(
                   margin: EdgeInsets.symmetric(horizontal: 50.0,),
@@ -178,7 +258,7 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ),
       ),
-       );
+    );
   }
 }
 

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:kafes_app/Components/post_page_flow.dart';
 import 'package:kafes_app/Screens/other_profile.dart';
 import 'package:kafes_app/Screens/who_applied.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class PostPage extends StatefulWidget {
 
@@ -32,11 +33,16 @@ class _PostPageState extends State<PostPage> {
   final TextEditingController _commentController = TextEditingController();
   CollectionReference _ref;
   FocusNode _focusNode;
+  bool imageLoading = false;
+  String fileName;
+  String imageUrl;
+  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
 
   @override
   void initState() {
     getCommentAuthorUsername();
     getPostData();
+    getImageUrl();
     applyStatus();
     _ref = FirebaseFirestore.instance.collection('post/${widget.postID}/comments');
     _focusNode = FocusNode();
@@ -47,6 +53,12 @@ class _PostPageState extends State<PostPage> {
   void dispose() {
     _focusNode.dispose();
     super.dispose();
+  }
+
+  getImageUrl() async {
+    final ref = storage.ref("profilePic").child(widget.uid);
+    imageUrl = await ref.getDownloadURL();
+
   }
 
   void applyStatus() async {
@@ -103,6 +115,7 @@ class _PostPageState extends State<PostPage> {
         }
     );
   }
+
 
   void seeApplicants() {
     Navigator.push(context,
@@ -162,6 +175,8 @@ class _PostPageState extends State<PostPage> {
                 Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: postAuthorUid)),);
               },
               leading: CircleAvatar(
+                backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
+                radius: 20.0,
               ),
               title: Container(
                 constraints: new BoxConstraints(

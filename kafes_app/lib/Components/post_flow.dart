@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +7,7 @@ import 'package:kafes_app/Screens/other_profile.dart';
 import 'package:kafes_app/Screens/post_edit_page.dart';
 import 'package:kafes_app/Screens/post_page.dart';
 import 'package:kafes_app/Screens/who_liked.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class PostFlow extends StatefulWidget {
 
@@ -13,11 +16,22 @@ class PostFlow extends StatefulWidget {
   final bool isHomePage;
   final String otherUid;
   final bool editProfile;
+
   @override
   _PostFlowState createState() => _PostFlowState();
 }
 
 class _PostFlowState extends State<PostFlow> {
+  String imageUrl;
+  firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
+
+  getImageUrl() async {
+    final ref = storage.ref("profilePic").child(widget.otherUid);
+    imageUrl = await ref.getDownloadURL();
+    Timer(Duration(seconds: 2), () => null);
+  }
+
+
 
   void deleteDialog(String docID, String postName) {
     showDialog(
@@ -78,6 +92,7 @@ class _PostFlowState extends State<PostFlow> {
     username = userData.get('username');
   }
 
+
   @override
   Widget build(BuildContext context) {
     if(!widget.isHomePage && widget.editProfile){
@@ -108,7 +123,10 @@ class _PostFlowState extends State<PostFlow> {
                         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc["postAuthorUid"])),);
                       },
                       leading: CircleAvatar(
-                      ),
+                      backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
+                      radius: 20.0,
+                        backgroundColor: Colors.white,
+            ),
                       title: Container(
                         constraints: new BoxConstraints(
                           minHeight: 10.0,
@@ -253,6 +271,9 @@ class _PostFlowState extends State<PostFlow> {
                         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc["postAuthorUid"])),);
                       },
                       leading: CircleAvatar(
+                        backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
+                        radius: 20.0,
+                        backgroundColor: Colors.white,
                       ),
                       title: Container(
                         constraints: new BoxConstraints(
@@ -379,6 +400,9 @@ class _PostFlowState extends State<PostFlow> {
                       Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc["postAuthorUid"])),);
                     },
                     leading: CircleAvatar(
+                      backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
+                      radius: 20.0,
+                      backgroundColor: Colors.white,
                     ),
                     title: Container(
                       constraints: new BoxConstraints(
