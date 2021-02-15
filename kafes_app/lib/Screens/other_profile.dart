@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -80,11 +82,12 @@ class _OtherProfileState extends State<OtherProfile> {
     setState(() {
       imageLoading = true;
     });
-    final ref = storage.ref().child(widget.otherUid);
+    final ref = storage.ref("profilePic").child(widget.otherUid);
     imageUrl = await ref.getDownloadURL();
-    setState(() {
+    Timer(Duration(seconds: 1), () => setState(() {
       imageLoading = false;
-    });
+    }),);
+
   }
 
 
