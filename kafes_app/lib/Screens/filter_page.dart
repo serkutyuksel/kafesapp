@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 
 
 class FilterPage extends StatefulWidget {
-  FilterPage({this.uid, this.filter});
-  final uid;
+  FilterPage({this.filter});
   final filter;
 
   @override

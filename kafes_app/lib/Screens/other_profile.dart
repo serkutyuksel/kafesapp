@@ -41,6 +41,7 @@ class _OtherProfileState extends State<OtherProfile> {
     getFullName();
     getGender();
     getImageUrl();
+    super.initState();
   }
 
     void getUsername() async {

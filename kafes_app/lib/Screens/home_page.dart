@@ -4,6 +4,7 @@ import 'package:kafes_app/Components/post_flow.dart';
 import 'package:kafes_app/Screens/new_post.dart';
 import 'package:kafes_app/Screens/profile_page.dart';
 import 'package:kafes_app/Screens/filter_page.dart';
+import 'package:kafes_app/Components/categoryOptions.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({
@@ -15,11 +16,8 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-enum filterOption { like, date, category }
-
 class _HomePageState extends State<HomePage> {
   void filterDialog() {
-    filterOption _filter = filterOption.like;
     showDialog(
         context: context,
         barrierDismissible: false,
@@ -32,56 +30,38 @@ class _HomePageState extends State<HomePage> {
             content: Column(
               children: <Widget>[
                 ListTile(
-                  title: const Text('Most Liked Posts'),
-                  leading: Radio(
-                    value: filterOption.like,
-                    groupValue: _filter,
-                    onChanged: (filterOption value) {
-                      setState(() {
-                        _filter = value;
-                      });
+                  leading: MaterialButton(
+                    child: Text(
+                      "Most Liked",
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+                    onPressed: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  FilterPage(filter: "like"))),
                     },
                   ),
                 ),
                 ListTile(
-                  title: const Text('Oldest Posts First'),
-                  leading: Radio(
-                    value: filterOption.date,
-                    groupValue: _filter,
-                    onChanged: (filterOption value) {
-                      setState(() {
-                        _filter = value;
-                      });
+                  leading: MaterialButton(
+                    child: Text(
+                      "Oldest Posts First",
+                      style: TextStyle(color: Colors.redAccent),
+                    ),
+                    onPressed: () => {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (BuildContext context) => FilterPage(filter: "oldest"))),
                     },
                   ),
                 ),
-                ListTile(
-                  title: const Text('Pick A Category'),
-                  leading: Radio(
-                    value: filterOption.category,
-                    groupValue: _filter,
-                    onChanged: (filterOption value) {
-                      setState(() {
-                        _filter = value;
-                      });
-                    },
-                  ),
-                ),
+               CategoryOptions(),
               ],
             ),
             actions: [
-              TextButton(
-                  child: Text(
-                    "Apply Filter",
-                    style: TextStyle(color: Colors.redAccent),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (BuildContext context) =>
-                                FilterPage(uid: widget.uid, filter: _filter)));
-                  }),
               TextButton(
                 child: Text(
                   "Cancel",
@@ -126,7 +106,9 @@ class _HomePageState extends State<HomePage> {
                 CupertinoIcons.search_circle,
                 size: 40.0,
               ),
-              onPressed: () {filterDialog();})
+              onPressed: () {
+                filterDialog();
+              })
         ],
         backgroundColor: Colors.redAccent,
       ),

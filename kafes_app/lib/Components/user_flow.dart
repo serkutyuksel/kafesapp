@@ -46,8 +46,7 @@ class _UserFlowState extends State<UserFlow> {
                       onTap: () {
                         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc.id.toString())),);
                       },
-                      leading: CircleAvatar(
-                      ),
+                      leading: Icon(Icons.alternate_email,size: 30,color: Colors.white,),
                       title: Container(
                         constraints: new BoxConstraints(
                           minHeight: 10.0,
