@@ -17,20 +17,28 @@ class PostFlow extends StatefulWidget {
   final String otherUid;
   final bool editProfile;
 
+
   @override
   _PostFlowState createState() => _PostFlowState();
 }
 
 class _PostFlowState extends State<PostFlow> {
   String imageUrl;
+  bool imageLoading = false;
+  final firestore = FirebaseFirestore.instance;
   firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
 
   getImageUrl() async {
+    setState(() {
+      imageLoading = true;
+    });
     final ref = storage.ref("profilePic").child(widget.otherUid);
     imageUrl = await ref.getDownloadURL();
-    Timer(Duration(seconds: 2), () => null);
-  }
+    Timer(Duration(seconds: 1), () => setState(() {
+      imageLoading = false;
+    }),);
 
+  }
 
 
   void deleteDialog(String docID, String postName) {
@@ -52,6 +60,15 @@ class _PostFlowState extends State<PostFlow> {
               TextButton(
                   child: Text("Delete", style: TextStyle(color: Colors.redAccent),),
                   onPressed: () async{
+                    await firestore.collection('post').doc(docID).collection("liked").get().then((snapshot) {
+                      for (DocumentSnapshot ds in snapshot.docs){
+                        ds.reference.delete();
+                      }});
+                    await firestore.collection('post').doc(docID).collection("applied").get().then((snapshot) {
+                      for (DocumentSnapshot ds in snapshot.docs){
+                        ds.reference.delete();
+                      }});
+
                     await FirebaseFirestore.instance.collection('post').doc(docID).delete();
                     Navigator.of(context).pop();
                   }
@@ -122,11 +139,6 @@ class _PostFlowState extends State<PostFlow> {
                       onTap: () {
                         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc["postAuthorUid"])),);
                       },
-                      leading: CircleAvatar(
-                      backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
-                      radius: 20.0,
-                        backgroundColor: Colors.white,
-            ),
                       title: Container(
                         constraints: new BoxConstraints(
                           minHeight: 10.0,
@@ -140,7 +152,7 @@ class _PostFlowState extends State<PostFlow> {
                       onTap: (){
                         Navigator.push(context,
                             MaterialPageRoute(
-                                builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: false, user: username,)));
+                                builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: false, user: username)));
                       },
                       onLongPress: (){
                         postOptions(context);
@@ -198,15 +210,6 @@ class _PostFlowState extends State<PostFlow> {
                                   }
                               ),
                               Text(doc['likes'].toString()),
-                              IconButton(
-                                icon: Icon(Icons.comment),
-                                iconSize: 30,
-                                onPressed: (){
-                                  Navigator.push(context,
-                                      MaterialPageRoute(
-                                          builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: true, user: username)));
-                                },
-                              ),
                             ],
                           ),
                           MaterialButton(
@@ -270,11 +273,6 @@ class _PostFlowState extends State<PostFlow> {
                       onTap: () {
                         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc["postAuthorUid"])),);
                       },
-                      leading: CircleAvatar(
-                        backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
-                        radius: 20.0,
-                        backgroundColor: Colors.white,
-                      ),
                       title: Container(
                         constraints: new BoxConstraints(
                           minHeight: 10.0,
@@ -288,7 +286,7 @@ class _PostFlowState extends State<PostFlow> {
                       onTap: (){
                         Navigator.push(context,
                             MaterialPageRoute(
-                                builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: false, user: username,)));
+                                builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: false, user: username)));
                       },
                       onLongPress: (){
                         postOptions(context);
@@ -399,11 +397,6 @@ class _PostFlowState extends State<PostFlow> {
                     onTap: () {
                       Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc["postAuthorUid"])),);
                     },
-                    leading: CircleAvatar(
-                      backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
-                      radius: 20.0,
-                      backgroundColor: Colors.white,
-                    ),
                     title: Container(
                       constraints: new BoxConstraints(
                         minHeight: 10.0,
