@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:kafes_app/Screens/filter_page.dart';
 
 class CategoryOptions extends StatefulWidget {
+  CategoryOptions({this.uid});
+  final uid;
   @override
   _CategoryOptionsState createState() => _CategoryOptionsState();
 }
@@ -73,7 +75,7 @@ class _CategoryOptionsState extends State<CategoryOptions> {
               Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (BuildContext context) => FilterPage(filter: "oldest"))),
+                      builder: (BuildContext context) => FilterPage(filter: _department))),
             },
           ),
           ],

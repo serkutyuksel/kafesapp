@@ -40,7 +40,7 @@ class _HomePageState extends State<HomePage> {
                           context,
                           MaterialPageRoute(
                               builder: (BuildContext context) =>
-                                  FilterPage(filter: "like"))),
+                                  FilterPage(filter: "like", uid: widget.uid))),
                     },
                   ),
                 ),
@@ -54,11 +54,11 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (BuildContext context) => FilterPage(filter: "oldest"))),
+                              builder: (BuildContext context) => FilterPage(filter: "oldest", uid: widget.uid))),
                     },
                   ),
                 ),
-               CategoryOptions(),
+               CategoryOptions(uid: widget.uid),
               ],
             ),
             actions: [
