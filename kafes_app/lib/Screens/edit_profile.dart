@@ -100,7 +100,7 @@ class _EditProfileState extends State<EditProfile> {
           Navigator.pushReplacement(context,
               MaterialPageRoute(
                   builder: (BuildContext context) =>
-                      ProfilePage(uid: widget.uid, profilePic: widget.imageUrl))));
+                      ProfilePage(uid: widget.uid))));
     }
   }
 

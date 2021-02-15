@@ -41,11 +41,11 @@ class _PostPageState extends State<PostPage> {
   @override
   void initState() {
     getCommentAuthorUsername();
-    getPostData();
-    getImageUrl();
     applyStatus();
+    getPostData();
     _ref = FirebaseFirestore.instance.collection('post/${widget.postID}/comments');
     _focusNode = FocusNode();
+    getImageUrl();
     super.initState();
   }
 
@@ -54,10 +54,15 @@ class _PostPageState extends State<PostPage> {
     _focusNode.dispose();
     super.dispose();
   }
-
   getImageUrl() async {
-    final ref = storage.ref("profilePic").child(widget.uid);
+    setState(() {
+      imageLoading = true;
+    });
+    final ref = storage.ref("profilePic").child(postAuthorUid);
     imageUrl = await ref.getDownloadURL();
+    Timer(Duration(seconds: 1), () => setState(() {
+      imageLoading = false;
+    }),);
 
   }
 
@@ -174,10 +179,6 @@ class _PostPageState extends State<PostPage> {
               onTap: () {
                 Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: postAuthorUid)),);
               },
-              leading: CircleAvatar(
-                backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
-                radius: 20.0,
-              ),
               title: Container(
                 constraints: new BoxConstraints(
                   minHeight: 10.0,

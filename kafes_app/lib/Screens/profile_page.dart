@@ -17,10 +17,9 @@ import 'edit_page.dart';
 
 class ProfilePage extends StatefulWidget {
 
-  ProfilePage({this.uid, this.profilePic});
+  ProfilePage({this.uid});
   final String uid;
   final bool profile = true;
-  var profilePic;
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -34,7 +33,6 @@ class _ProfilePageState extends State<ProfilePage> {
   var department = "";
   var fullName = "";
   var gender = "";
-  var profilePic = "";
   String fileName;
   String imageUrl;
   bool imageLoading = false;
