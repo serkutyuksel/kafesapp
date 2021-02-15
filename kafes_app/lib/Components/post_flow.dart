@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -25,13 +26,8 @@ class _PostFlowState extends State<PostFlow> {
   firebase_storage.FirebaseStorage storage = firebase_storage.FirebaseStorage.instance;
 
   getImageUrl() async {
-    try {
-      final ref = storage.ref("profilePic").child(widget.otherUid);
-      imageUrl = await ref.getDownloadURL();
-    }
-    on firebase_storage.FirebaseStorage catch(error) {
-      imageUrl = null;
-    }
+    final ref = storage.ref("profilePic").child(widget.otherUid);
+    imageUrl = await ref.getDownloadURL();
     Timer(Duration(seconds: 2), () => null);
   }
 
@@ -122,15 +118,12 @@ class _PostFlowState extends State<PostFlow> {
                 ),
                 child: Column(
                   children: [
-
-
                     ListTile(
                       onTap: () {
                         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc["postAuthorUid"])),);
                       },
                       leading: CircleAvatar(
-                      backgroundImage:NetworkImage(imageUrl==null?
-                      "https://firebasestorage.googleapis.com/v0/b/kafes-70338.appspot.com/o/utility%2Fblank-profile.png?alt=media&token=d56220ba-9790-4ba0-94d2-6c73ab321cc1":imageUrl),
+                      backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
                       radius: 20.0,
                         backgroundColor: Colors.white,
             ),
@@ -170,83 +163,76 @@ class _PostFlowState extends State<PostFlow> {
                       ),
                     ),
                     Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
                             children: [
-                               Expanded(
-                                 child: IconButton(
-                                      icon: Icon(Icons.favorite),
-                                      iconSize: 30,
-                                      onPressed: () async {
-                                        var control = false;
-                                        await FirebaseFirestore.instance.collection('post').
-                                        doc(doc.id).collection('liked').get().then((queryLike) =>
-                                        {
-                                          queryLike.docs.forEach((element) {
-                                            if(element.id == widget.uid) {
-                                              FirebaseFirestore.instance.collection('post').
-                                              doc(doc.id).collection('liked').doc(widget.uid).delete();
-                                              FirebaseFirestore.instance.collection('post').doc(doc.id)
-                                                  .update({'likes': doc['likes'] - 1});
-                                              control = true;
-                                            }
-                                          })
-                                        }
-                                        );
-                                        if(control == false) {
-                                          FirebaseFirestore.instance.collection('post')
-                                              .doc(doc.id).collection('liked').doc(widget.uid)
-                                              .set({'isLiked': username});
+                              IconButton(
+                                  icon: Icon(Icons.favorite),
+                                  iconSize: 30,
+                                  onPressed: () async {
+                                    var control = false;
+                                    await FirebaseFirestore.instance.collection('post').
+                                    doc(doc.id).collection('liked').get().then((queryLike) =>
+                                    {
+                                      queryLike.docs.forEach((element) {
+                                        if(element.id == widget.uid) {
+                                          FirebaseFirestore.instance.collection('post').
+                                          doc(doc.id).collection('liked').doc(widget.uid).delete();
                                           FirebaseFirestore.instance.collection('post').doc(doc.id)
-                                              .update({'likes': doc['likes'] + 1});
+                                              .update({'likes': doc['likes'] - 1});
+                                          control = true;
                                         }
-                                      }
-                                  ),
-                               ),
-                              Expanded(child: Text(doc['likes'].toString())),
-                              Expanded(
-                                child: IconButton(
-                                    icon: Icon(Icons.comment),
-                                    iconSize: 30,
-                                    onPressed: (){
-                                      Navigator.push(context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: true, user: username)));
-                                    },
-                                  ),
+                                      })
+                                    }
+                                    );
+                                    if(control == false) {
+                                      FirebaseFirestore.instance.collection('post')
+                                          .doc(doc.id).collection('liked').doc(widget.uid)
+                                          .set({'isLiked': username});
+                                      FirebaseFirestore.instance.collection('post').doc(doc.id)
+                                          .update({'likes': doc['likes'] + 1});
+                                    }
+                                  }
                               ),
-                              Expanded(
-                                flex: 3,
-                                child: MaterialButton(
-                                    color: Colors.white,
-                                    child: Text("Like Details"),
-                                    onPressed: (){
-                                      Navigator.push(context,
-                                          MaterialPageRoute(
-                                              builder: (BuildContext context) => WhoLiked(uid: widget.uid, docId: doc.id)));
-                                    },
-                                  ),
+                              Text(doc['likes'].toString()),
+                              IconButton(
+                                icon: Icon(Icons.comment),
+                                iconSize: 30,
+                                onPressed: (){
+                                  Navigator.push(context,
+                                      MaterialPageRoute(
+                                          builder: (BuildContext context) => PostPage(uid: widget.uid, postID: doc.id, focusComment: true, user: username)));
+                                },
                               ),
-                              Expanded(
-                                flex: 3,
-                                child: MaterialButton(
-                                    color: Colors.white,
-                                    child: Text("Edit"),
-                                    onPressed: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>
-                                      PostEdit(docId: doc.id, uid: widget.uid)));
-                                      },
-                                    ),
-                              ),
-                              Expanded(
-                                child: IconButton(
-                                    icon: Icon(Icons.delete),
-                                    iconSize: 30,
-                                    onPressed: (){
-                                      deleteDialog(doc.id, doc['postTitle']);
-                                    },
-                                  ),
-                              ),
+                            ],
+                          ),
+                          MaterialButton(
+                            color: Colors.white,
+                            child: Text("Like Details"),
+                            onPressed: (){
+                              Navigator.push(context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) => WhoLiked(uid: widget.uid, docId: doc.id)));
+                            },
+                          ),
+                          MaterialButton(
+                            color: Colors.white,
+                            child: Text("Edit"),
+                            onPressed: (){
+                              Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) =>
+                                  PostEdit(docId: doc.id, uid: widget.uid)));
+                            },
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            iconSize: 30,
+                            onPressed: (){
+                              deleteDialog(doc.id, doc['postTitle']);
+                            },
+                          )
                         ],),
                     ),
                   ],
@@ -285,8 +271,7 @@ class _PostFlowState extends State<PostFlow> {
                         Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc["postAuthorUid"])),);
                       },
                       leading: CircleAvatar(
-                        backgroundImage:NetworkImage(imageUrl==null?
-                        "https://firebasestorage.googleapis.com/v0/b/kafes-70338.appspot.com/o/utility%2Fblank-profile.png?alt=media&token=d56220ba-9790-4ba0-94d2-6c73ab321cc1":imageUrl),
+                        backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
                         radius: 20.0,
                         backgroundColor: Colors.white,
                       ),
@@ -415,8 +400,7 @@ class _PostFlowState extends State<PostFlow> {
                       Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OtherProfile(uid: widget.uid, otherUid: doc["postAuthorUid"])),);
                     },
                     leading: CircleAvatar(
-                      backgroundImage:NetworkImage(imageUrl==null?
-                      "https://firebasestorage.googleapis.com/v0/b/kafes-70338.appspot.com/o/utility%2Fblank-profile.png?alt=media&token=d56220ba-9790-4ba0-94d2-6c73ab321cc1":imageUrl),
+                      backgroundImage:NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
                       radius: 20.0,
                       backgroundColor: Colors.white,
                     ),

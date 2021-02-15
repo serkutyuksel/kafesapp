@@ -36,7 +36,7 @@ class _ProfilePageState extends State<ProfilePage> {
   var gender = "";
   var profilePic = "";
   String fileName;
-  var imageUrl = null;
+  String imageUrl;
   bool imageLoading = false;
 
 
@@ -54,16 +54,12 @@ class _ProfilePageState extends State<ProfilePage> {
     setState(() {
       imageLoading = true;
     });
-    try {
-      final ref = storage.ref("profilePic").child(widget.uid);
-      imageUrl = await ref.getDownloadURL();
-    }
-    on FirebaseException catch(error) {
-      imageUrl = null;
-      Timer(Duration(seconds: 1), () => setState(() {
-        imageLoading = false;
-      }),);
-    }
+    final ref = storage.ref("profilePic").child(widget.uid);
+    imageUrl = await ref.getDownloadURL();
+    Timer(Duration(seconds: 1), () => setState(() {
+      imageLoading = false;
+    }),);
+
   }
 
     void getUsername() async {
@@ -137,9 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 width: 130.0,
                                 margin: EdgeInsets.all(20.0),
                                 child: CircleAvatar(
-                                  backgroundImage: imageLoading?
-                                  NetworkImage("https://firebasestorage.googleapis.com/v0/b/kafes-70338.appspot.com/o/utility%2Fprogress.gif?alt=media&token=d4b97311-2291-4f03-8bb7-db6c8b614a56"):
-                                  NetworkImage(imageUrl==null?"https://firebasestorage.googleapis.com/v0/b/kafes-70338.appspot.com/o/utility%2Fblank-profile.png?alt=media&token=d56220ba-9790-4ba0-94d2-6c73ab321cc1":imageUrl),
+                                  backgroundImage: imageLoading?NetworkImage("https://raw.githubusercontent.com/kishikawakatsumi/UCZProgressView/master/Screenshots/indeterminate.gif"):NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
                                   radius: 50.0,
                                   ),
                                 ),

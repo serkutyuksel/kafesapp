@@ -1,4 +1,5 @@
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -51,16 +52,12 @@ class _EditProfileState extends State<EditProfile> {
     setState(() {
       imageLoading = true;
     });
-    try {
-      final ref = storage.ref("profilePic").child(widget.uid);
-      imageUrl = await ref.getDownloadURL();
-    }
-    on FirebaseException catch(error) {
-      imageUrl = null;
-      Timer(Duration(seconds: 1), () => setState(() {
-        imageLoading = false;
-      }),);
-    }
+    final ref = storage.ref("profilePic").child(widget.uid);
+    imageUrl = await ref.getDownloadURL();
+    Timer(Duration(seconds: 1), () => setState(() {
+      imageLoading = false;
+    }),);
+
   }
 
   Future getImage() async {
@@ -148,8 +145,7 @@ class _EditProfileState extends State<EditProfile> {
                 ),
                 Container(
                   child: CircleAvatar(
-                    backgroundImage: NetworkImage(imageUrl==null?
-                    "https://firebasestorage.googleapis.com/v0/b/kafes-70338.appspot.com/o/utility%2Fblank-profile.png?alt=media&token=d56220ba-9790-4ba0-94d2-6c73ab321cc1":imageUrl),
+                    backgroundImage: NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl),
                     radius: 50.0,
                     backgroundColor: Colors.white,
                     child: IconButton(
