@@ -28,7 +28,7 @@ class _OtherProfileState extends State<OtherProfile> {
   var fullName = "";
   var gender = "";
   String fileName;
-  String imageUrl;
+  var imageUrl = null;
   bool imageLoading = false;
 
   @override
@@ -80,11 +80,16 @@ class _OtherProfileState extends State<OtherProfile> {
     setState(() {
       imageLoading = true;
     });
-    final ref = storage.ref().child(widget.otherUid);
-    imageUrl = await ref.getDownloadURL();
-    setState(() {
-      imageLoading = false;
-    });
+    try {
+      final ref = storage.ref("profilePic").child(widget.otherUid);
+      imageUrl = await ref.getDownloadURL();
+    }
+    on FirebaseException catch(error) {
+      imageUrl = null;
+      setState(() {
+        imageLoading = false;
+      });
+    }
   }
 
 
@@ -126,7 +131,8 @@ class _OtherProfileState extends State<OtherProfile> {
                             width: 130.0,
                             margin: EdgeInsets.all(20.0),
                             child: CircleAvatar(
-                              backgroundImage: NetworkImage(imageUrl==null?"https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png":imageUrl) ,
+                              backgroundImage: NetworkImage(imageUrl==null?
+                              storage.ref("utility").child("blank-profile.png"):imageUrl) ,
                               radius: 50.0,
                               ),
                             ),
