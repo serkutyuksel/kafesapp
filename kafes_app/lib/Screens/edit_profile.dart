@@ -87,6 +87,19 @@ class _EditProfileState extends State<EditProfile> {
   var newUsername = "";
   var newFullName= "";
 
+
+
+
+  @override
+  void initState() {
+    fullName = new TextEditingController(text: widget.fullName);
+    username = new TextEditingController(text: widget.username);
+    gender = new TextEditingController(text: widget.gender);
+    email = new TextEditingController(text: widget.email);
+    imageUrl = widget.imageUrl;
+
+  }
+
   void _submit () async {
     final isValid = _formKey.currentState.validate();
     if(isValid) {
@@ -103,18 +116,6 @@ class _EditProfileState extends State<EditProfile> {
                       ProfilePage(uid: widget.uid))));
     }
   }
-
-
-  @override
-  void initState() {
-    fullName = new TextEditingController(text: widget.fullName);
-    username = new TextEditingController(text: widget.username);
-    gender = new TextEditingController(text: widget.gender);
-    email = new TextEditingController(text: widget.email);
-    imageUrl = widget.imageUrl;
-
-  }
-
 
   @override
   Widget build(BuildContext context) {
