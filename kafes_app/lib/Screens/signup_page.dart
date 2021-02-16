@@ -164,7 +164,7 @@ class SignUpPageState extends State<SignUpPage> {
                   style: TextStyle(color: Colors.red),
                   key: ValueKey('email'),
                   validator: (value){
-                    if(value.isEmpty || !value.contains('@std.ieu.edu.tr')) {
+                    if(value.isEmpty || !value.contains('@std.ieu.edu.tr') || !value.contains('@ieu.edu.tr')) {
                       return 'Please enter a valid email address';
                     }
                     return null;

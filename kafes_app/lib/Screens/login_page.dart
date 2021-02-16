@@ -61,7 +61,7 @@ class LoginPageState extends State<LoginPage> {
                     key: ValueKey('mail'),
                     decoration: InputDecoration(labelText: 'Enter your mail'),
                     validator: (value) {
-                      if (value.isEmpty || !value.contains('@std.ieu.edu.tr')) {
+                      if (value.isEmpty || !value.contains('@std.ieu.edu.tr') || !value.contains('@ieu.edu.tr')) {
                         return 'Please enter a valid email address';
                       }
                       return null;
